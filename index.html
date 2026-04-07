@@ -7,10 +7,8 @@ import { getFirestore, collection, onSnapshot, doc, setDoc, getDoc } from 'fireb
 // ==========================================
 // INICIALIZAÇÃO DO FIREBASE (PERSISTÊNCIA)
 // ==========================================
-let app, auth, db, appId;
-try {
-  const firebaseConfig = {
-  apiKey: "AIzaSyD58iWIdedN8qlB3yE-pFviYnWyOqsEJWY",
+const firebaseConfig = {
+  apiKey: "AIzaSyD58iWidedN8qlb3yE-pFviYnWyOqsEJWY",
   authDomain: "central-amil-rh.firebaseapp.com",
   projectId: "central-amil-rh",
   storageBucket: "central-amil-rh.firebasestorage.app",
@@ -18,6 +16,12 @@ try {
   appId: "1:303247669677:web:fcaa6b7283752a561d4924",
   measurementId: "G-E24Y2G0HWR"
 };
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = "central-amil-rh"; // Usado para criar a pasta segura no banco de dados
+
 export default function App() {
   // ==========================================
   // 1. ESTADOS DA APLICAÇÃO
