@@ -1,26 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { UploadCloud, Search, FileText, CheckCircle, AlertCircle, Clock, Send, ChevronDown, ChevronUp, Download, AlertTriangle, Save, ListChecks, Cloud, Archive, Inbox, FileSpreadsheet, Mail, DollarSign, TrendingDown, Calendar, User, Lock, LogOut } from 'lucide-react';
+import { UploadCloud, Search, FileText, CheckCircle, AlertCircle, Clock, Send, ChevronDown, ChevronUp, Download, AlertTriangle, Save, ListChecks, Cloud, Archive, Inbox, FileSpreadsheet, Mail, DollarSign, TrendingDown, Calendar, User } from 'lucide-react';
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInWithCustomToken, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, onSnapshot, doc, setDoc, getDoc } from 'firebase/firestore';
 
 // ==========================================
 // INICIALIZAÇÃO DO FIREBASE (PERSISTÊNCIA)
 // ==========================================
-const firebaseConfig = {
-  apiKey: "AIzaSyD58iWidedN8qlb3yE-pFviYnWyOqsEJWY",
-  authDomain: "central-amil-rh.firebaseapp.com",
-  projectId: "central-amil-rh",
-  storageBucket: "central-amil-rh.firebasestorage.app",
-  messagingSenderId: "303247669677",
-  appId: "1:303247669677:web:fcaa6b7283752a561d4924",
-  measurementId: "G-E24Y2G0HWR"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const appId = "central-amil-rh"; // Usado para criar a pasta segura no banco de dados
+let app, auth, db, appId;
+try {
+  const firebaseConfig = {
+    apiKey: "AIzaSyCdzXVqIF7sGHCGSIvc8-r04wj9GHoEI0U",
+    authDomain: "painel-amil-rh.firebaseapp.com",
+    projectId: "painel-amil-rh",
+    storageBucket: "painel-amil-rh.firebasestorage.app",
+    messagingSenderId: "263470309283",
+    appId: "1:263470309283:web:b548152f6d1ad842914416",
+    measurementId: "G-4JC8LLFTQC"
+  };
 
 export default function App() {
   // ==========================================
@@ -40,7 +37,6 @@ export default function App() {
 
   // Estados de Busca e Formulário
   const [cpfBusca, setCpfBusca] = useState('');
-  const [nomeBusca, setNomeBusca] = useState(''); // NOVO: Para permitir adesões manuais
   const [dataDesligamento, setDataDesligamento] = useState(''); 
   const [motivo, setMotivo] = useState('');
 
@@ -61,14 +57,10 @@ export default function App() {
   const [alertaGlobal, setAlertaGlobal] = useState('');
   const [salvando, setSalvando] = useState(false);
   
-  // Identificação do Operador e Autenticação Real
+  // Identificação do Operador
   const [operador, setOperador] = useState('');
+  const [showLogin, setShowLogin] = useState(false);
   const [inputNome, setInputNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [isLoginMode, setIsLoginMode] = useState(true);
-  const [authError, setAuthError] = useState('');
-  const [isAuthChecking, setIsAuthChecking] = useState(true);
 
   // Estado para o PDF Oficial anexado
   const [pdfOficialUrl, setPdfOficialUrl] = useState(null);
@@ -95,50 +87,29 @@ export default function App() {
   // AUTENTICAÇÃO E SINCRONIZAÇÃO (FIREBASE)
   // ==========================================
   
-  // NOVO: Funções de Autenticação com Email e Senha
-  const handleAuthSubmit = async (e) => {
-    e.preventDefault();
-    setAuthError('');
-    
-    if (!email || !senha) {
-      setAuthError('Preenche o e-mail e a senha.');
+  useEffect(() => {
+    const salvo = localStorage.getItem('amil_operador');
+    if (salvo) {
+      setOperador(salvo);
+    } else {
+      setShowLogin(true);
+    }
+  }, []);
+
+  const handleAcessarPainel = () => {
+    if (inputNome.trim().length < 2) {
+      setAlertaGlobal("Por favor, digite seu nome para continuar.");
       return;
     }
-
-    try {
-      if (isLoginMode) {
-        await signInWithEmailAndPassword(auth, email, senha);
-      } else {
-        if (inputNome.trim().length < 2) {
-          setAuthError('Preenche o teu nome para registo.');
-          return;
-        }
-        await createUserWithEmailAndPassword(auth, email, senha);
-        localStorage.setItem('amil_operador', inputNome.trim());
-      }
-    } catch (error) {
-      console.error(error);
-      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
-        setAuthError('E-mail ou senha incorretos.');
-      } else if (error.code === 'auth/email-already-in-use') {
-        setAuthError('Este e-mail já está registado.');
-      } else if (error.code === 'auth/weak-password') {
-        setAuthError('A senha deve ter pelo menos 6 caracteres.');
-      } else {
-        setAuthError('Erro na autenticação. Tenta novamente.');
-      }
-    }
+    localStorage.setItem('amil_operador', inputNome.trim());
+    setOperador(inputNome.trim());
+    setShowLogin(false);
   };
 
-  const handleSair = async () => {
-    try {
-      await signOut(auth);
-      setOperador('');
-      setEmail('');
-      setSenha('');
-    } catch (error) {
-      console.error("Erro ao sair:", error);
-    }
+  const handleTrocarOperador = () => {
+    localStorage.removeItem('amil_operador');
+    setInputNome(operador);
+    setShowLogin(true);
   };
 
   useEffect(() => {
@@ -147,23 +118,15 @@ export default function App() {
       try {
         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
           await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
         }
       } catch (error) {
-        console.error("Erro no token customizado:", error);
+        console.error("Erro na autenticação:", error);
       }
     };
     initAuth();
-    
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setIsAuthChecking(false);
-      
-      if (currentUser) {
-        const savedNome = localStorage.getItem('amil_operador');
-        // Define o nome do operador. Se não houver nome guardado, usa a primeira parte do email
-        setOperador(savedNome || currentUser.email.split('@')[0]);
-      }
-    });
+    const unsubscribe = onAuthStateChanged(auth, setUser);
     return () => unsubscribe();
   }, []);
 
@@ -441,28 +404,16 @@ export default function App() {
 
     const cpfDigitado = limparDocumento(cpfBusca);
 
-    if (!cpfDigitado || !dataDesligamento) { setErroPesquisa('Preencha o CPF e a Data do Evento.'); return; }
-    if (faturaSaude.length === 0 && faturaDental.length === 0 && baseSistema.length === 0 && !nomeBusca) { 
-      setErroPesquisa('Carregue as bases ou preencha o Nome manualmente para prosseguir com novas adesões.'); 
-      return; 
-    }
+    if (!cpfDigitado || !dataDesligamento) { setErroPesquisa('Preencha o CPF e a Data de Rescisão.'); return; }
+    if (faturaSaude.length === 0 && faturaDental.length === 0) { setErroPesquisa('As faturas de Saúde e/ou Dental precisam estar carregadas.'); return; }
 
     const cadastro = baseSistema.find(f => limparDocumento(extrairCpf(f)) === cpfDigitado);
     const saude = faturaSaude.find(f => limparDocumento(extrairCpf(f)) === cpfDigitado);
     const dental = faturaDental.find(f => limparDocumento(extrairCpf(f)) === cpfDigitado);
 
-    const nomeEncontrado = extrairNome(cadastro) || extrairNome(saude) || extrairNome(dental) || nomeBusca || 'Nome não identificado';
+    if (!cadastro && !saude && !dental) { setErroPesquisa('Colaborador não encontrado em nenhuma das bases carregadas.'); return; }
 
-    if (!cadastro && !saude && !dental) {
-      if (tipoMovimento === 'exclusao' || tipoMovimento === 'mudanca_plano') {
-        setErroPesquisa(`Não encontrado. Para ${tipoMovimento === 'exclusao' ? 'Exclusão' : 'Mudança'}, é necessário ter o plano ativo ou constar na Base RH.`); 
-        return;
-      } else if (!nomeBusca) {
-        setErroPesquisa('Para novas Adesões não encontradas nas bases, por favor digite o Nome Completo no campo correspondente.');
-        return;
-      }
-    }
-
+    const nomeEncontrado = extrairNome(cadastro) || extrairNome(saude) || extrairNome(dental) || 'Nome não identificado';
     const inicioSaude = extrairDataInicio(saude);
     const inicioDental = extrairDataInicio(dental);
     const admissaoEncontrada = extrairAdmissao(cadastro);
@@ -472,7 +423,7 @@ export default function App() {
     setResultado({
       nome: nomeEncontrado,
       tipo: tipoMovimento, 
-      admissao: formatarDataApresentacao(admissaoEncontrada) || dataDesligamento.split('-').reverse().join('/'),
+      admissao: formatarDataApresentacao(admissaoEncontrada) || 'Não informado na Base',
       saude: saude ? { ativo: true, carteirinha: extrairCarteirinha(saude) || saude.carteirinha, inicioPlano: inicioSaude, tempo: calcularTempo(inicioSaude, dataDesligamento) } : { ativo: false },
       dental: dental ? { ativo: true, carteirinha: extrairCarteirinha(dental) || dental.carteirinha, inicioPlano: inicioDental, tempo: calcularTempo(inicioDental, dataDesligamento) } : { ativo: false },
       custoTotal: custoSaude + custoDental
@@ -523,24 +474,13 @@ export default function App() {
       const custoSaude = extrairCusto(saude);
       const custoDental = extrairCusto(dental);
       const admissaoRaw = extrairAdmissao(cadastro) || extrairAdmissao(registro);
-      const admissao = formatarDataApresentacao(admissaoRaw) || dataApresentacao;
+      const admissao = formatarDataApresentacao(admissaoRaw) || 'Não informado na Base';
       const diasPassados = calcularDiasDesdeRescisao(dataApresentacao);
       
-      let statusInicial = 'Pendente de Lançamento';
-      let obsAutomatica = '';
+      let obsAutomatica = temPlano ? '⚠️ Espelho pronto para geração.' : '✅ Validado na fatura.';
       
-      if (tipoLote === 'exclusao') {
-        statusInicial = temPlano ? 'Pendente de Exclusão' : 'Sem plano ativo (Baixa automática)';
-        obsAutomatica = temPlano ? '⚠️ Espelho pronto para geração.' : '✅ Validado na fatura (Sem plano ativo).';
-        if (temPlano && diasPassados > 30) {
-          obsAutomatica = `⛔ Passaram ${diasPassados} dias da rescisão (prazo 30 dias). Exclusão obrigatória.`;
-        }
-      } else if (tipoLote === 'adesao' || tipoLote === 'inclusao_dep') {
-        statusInicial = 'Pendente de Lançamento';
-        obsAutomatica = temPlano ? '⚠️ Atenção: CPF já possui plano ativo nas faturas de saúde/dental!' : '✅ Nova adesão pronta para tratativa.';
-      } else if (tipoLote === 'mudanca_plano') {
-        statusInicial = temPlano ? 'Pendente de Lançamento' : '⚠️ Sem plano ativo para alterar (Baixa automática)';
-        obsAutomatica = temPlano ? '🔄 Pronto para alteração.' : 'Atenção: CPF não localizado nas faturas para alteração.';
+      if (tipoLote === 'exclusao' && temPlano && diasPassados > 30) {
+        obsAutomatica = `⛔ Passaram ${diasPassados} dias da rescisão (prazo 30 dias). Exclusão obrigatória (perda do direito).`;
       }
 
       const novoItem = {
@@ -554,10 +494,10 @@ export default function App() {
         saude: saude ? { ativo: true, carteirinha: extrairCarteirinha(saude), inicioPlano: inicioSaude, tempo: calcularTempo(inicioSaude, dataRaw) } : { ativo: false },
         dental: dental ? { ativo: true, carteirinha: extrairCarteirinha(dental), inicioPlano: inicioDental, tempo: calcularTempo(inicioDental, dataRaw) } : { ativo: false },
         custoTotal: custoSaude + custoDental,
-        status: statusInicial, // Usando o novo status inteligente
+        status: temPlano ? 'Pendente de Exclusão' : 'Sem plano ativo (Baixa automática)',
         dataEntrega: '',
         emailHp: '',
-        observacao: obsAutomatica, // Usando a nova observação inteligente
+        observacao: obsAutomatica,
         pdfUrl: null,
         operadorResponsavel: operador 
       };
@@ -577,10 +517,8 @@ export default function App() {
     setLoteDesligamentos([]);
   };
 
-  const preencherEBuscar = (cpf, dataResc, nome, tipo) => {
+  const preencherEBuscar = (cpf, dataResc) => {
     setCpfBusca(cpf);
-    setNomeBusca(nome || '');
-    setTipoMovimento(tipo || 'exclusao');
     if (dataResc && dataResc.includes('/')) {
       const [d, m, y] = dataResc.split('/');
       if (y && m && d) setDataDesligamento(`${y}-${m}-${d}`);
@@ -588,7 +526,7 @@ export default function App() {
       setDataDesligamento(dataResc);
     }
     
-    setSucessoMsg("Dados preenchidos na busca! Verifique e gere o espelho.");
+    setSucessoMsg("Dados preenchidos na busca! Selecione a Regra ANS e gere o espelho.");
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -947,68 +885,31 @@ export default function App() {
     window.location.href = mailtoUrl;
   };
 
-  // TELA DE AUTENTICAÇÃO COM LOGIN E SENHA
-  if (isAuthChecking) {
-    return <div className="min-h-screen bg-gray-50 flex items-center justify-center font-sans text-blue-600 font-bold">Carregando ambiente seguro...</div>;
-  }
-
-  if (!user) {
+  if (showLogin) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
         <div className="bg-white p-8 rounded-2xl shadow-xl max-w-md w-full border border-gray-100">
           <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Lock size={32} />
+            <User size={32} />
           </div>
-          <h2 className="text-2xl font-bold text-center text-blue-900 mb-2">
-            {isLoginMode ? 'Acesso Restrito' : 'Criar Conta'}
-          </h2>
-          <p className="text-gray-500 text-center mb-6 text-sm">
-            {isLoginMode ? 'Insere as tuas credenciais para aceder à central.' : 'Regista-te para operar na central de movimentações.'}
-          </p>
+          <h2 className="text-2xl font-bold text-center text-blue-900 mb-2">Identificação da Equipe</h2>
+          <p className="text-gray-500 text-center mb-8 text-sm">Para operarem juntos em tempo real, informe seu nome. Ele ficará registrado nas tratativas.</p>
           
-          {authError && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg flex items-center gap-2">
-              <AlertCircle size={16} className="shrink-0" /> {authError}
-            </div>
-          )}
-
-          <form onSubmit={handleAuthSubmit} className="space-y-4">
-            {!isLoginMode && (
-              <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Nome Completo</label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><User size={18} /></div>
-                  <input type="text" value={inputNome} onChange={(e) => setInputNome(e.target.value)} placeholder="O teu nome" className="w-full pl-10 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" />
-                </div>
-              </div>
-            )}
-            
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">E-mail Corporativo</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><Mail size={18} /></div>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@empresa.com" className="w-full pl-10 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Senha</label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400"><Lock size={18} /></div>
-                <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} placeholder="••••••••" className="w-full pl-10 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" />
-              </div>
-            </div>
-
-            <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-md mt-2">
-              {isLoginMode ? 'Entrar no Painel' : 'Registar e Aceder'}
-            </button>
-          </form>
-
-          <div className="mt-6 text-center">
-            <button onClick={() => { setIsLoginMode(!isLoginMode); setAuthError(''); }} className="text-sm text-blue-600 hover:text-blue-800 font-semibold transition-colors">
-              {isLoginMode ? 'Não tens conta? Criar agora.' : 'Já tens conta? Fazer login.'}
-            </button>
-          </div>
+          <label className="block text-sm font-bold text-gray-700 mb-2">Seu Nome ou Credencial:</label>
+          <input 
+            type="text" 
+            value={inputNome} 
+            onChange={(e) => setInputNome(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleAcessarPainel()}
+            placeholder="Ex: Carlos RH" 
+            className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none mb-6" 
+          />
+          <button 
+            onClick={handleAcessarPainel} 
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-xl transition-colors shadow-md flex justify-center items-center gap-2"
+          >
+            Acessar Painel <ChevronDown className="-rotate-90" size={20}/>
+          </button>
         </div>
       </div>
     );
@@ -1045,17 +946,12 @@ export default function App() {
           </div>
           
           <div className="flex flex-col md:flex-row flex-wrap gap-2 md:items-center">
-            
-            <div className="flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-800 rounded-lg text-sm font-bold border border-blue-200 mr-2">
-              <User size={16}/> {operador}
-            </div>
-            
             <button 
-              onClick={handleSair}
-              className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-red-50 hover:text-red-600 hover:border-red-200 transition-colors text-sm font-bold border border-gray-200 mr-2"
-              title="Terminar Sessão"
+              onClick={handleTrocarOperador}
+              className="flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium border border-gray-200 mr-2"
+              title="Trocar usuário"
             >
-              <LogOut size={16}/> Sair
+              <User size={16}/> {operador}
             </button>
 
             {pdfOficialUrl ? (
@@ -1158,8 +1054,8 @@ export default function App() {
             <Search className="text-gray-400" /> 2. Buscar e Calcular
           </h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end bg-blue-50/50 p-4 rounded-lg border border-blue-100">
-            <div className="col-span-1 md:col-span-1">
+          <div className="flex flex-col md:flex-row gap-4 items-end bg-blue-50/50 p-4 rounded-lg border border-blue-100">
+            <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">Tipo da Solicitação</label>
               <select value={tipoMovimento} onChange={(e) => setTipoMovimento(e.target.value)} className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none bg-white">
                 <option value="exclusao">🛑 Exclusão (Desligamento)</option>
@@ -1168,23 +1064,17 @@ export default function App() {
                 <option value="mudanca_plano">🔄 Mudança de Plano</option>
               </select>
             </div>
-            <div className="col-span-1 md:col-span-1">
+            <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">CPF do Colaborador</label>
               <input type="text" placeholder="Ex: 55566677788" value={cpfBusca} onChange={(e) => setCpfBusca(e.target.value)} className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"/>
             </div>
-            <div className="col-span-1 md:col-span-1">
-              <label className="block text-[11px] font-bold text-gray-700 mb-1 leading-tight">Nome <span className="font-normal text-gray-500">(Obrigatório em Adesões)</span></label>
-              <input type="text" placeholder="Nome Completo..." value={nomeBusca} onChange={(e) => setNomeBusca(e.target.value)} className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"/>
-            </div>
-            <div className="col-span-1 md:col-span-1">
+            <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-1">Data do Evento</label>
               <input type="date" value={dataDesligamento} onChange={(e) => setDataDesligamento(e.target.value)} className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none"/>
             </div>
-            <div className="col-span-1 md:col-span-1">
-              <button onClick={handleBuscar} className="w-full px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors h-[42px] shadow-sm">
-                Processar Dados
-              </button>
-            </div>
+            <button onClick={handleBuscar} className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 transition-colors h-[42px] shadow-sm">
+              Processar Dados
+            </button>
           </div>
           {erroPesquisa && <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-md flex items-center gap-2 text-sm border border-red-200"><AlertCircle size={16} /> {erroPesquisa}</div>}
 
@@ -1505,7 +1395,7 @@ export default function App() {
                                     <FileText size={14} /> Gerar PDF
                                   </button>
                                   <button 
-                                    onClick={() => preencherEBuscar(item.cpf, item.dataRescisao, item.nome, item.tipoMovimento)}
+                                    onClick={() => preencherEBuscar(item.cpf, item.dataRescisao)}
                                     className="flex items-center justify-center bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded transition-colors text-xs font-bold"
                                     title="Avaliar manualmente na Busca"
                                   >
