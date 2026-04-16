@@ -67,51 +67,64 @@
 
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
             <!-- Indicadores -->
-            <div class="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-7 gap-4 mb-6">
-                <div onclick="setFilter('todos')" class="card-filtro bg-white p-4 border-l-4 border-slate-500 shadow-sm"><p class="text-[10px] uppercase text-slate-400 font-bold">Total Vidas (Com Plano)</p><p class="text-xl font-bold" id="count-total">0</p></div>
-                <div onclick="setFilter('titulares')" class="card-filtro bg-white p-4 border-l-4 border-blue-500 shadow-sm"><p class="text-[10px] uppercase text-blue-500 font-bold">Titulares (Com Plano)</p><p class="text-xl font-bold text-blue-600" id="count-titulares">0</p></div>
+            <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 mb-6">
+                <div onclick="setFilter('todos')" class="card-filtro bg-white p-4 border-l-4 border-slate-500 shadow-sm"><p class="text-[10px] uppercase text-slate-400 font-bold">Total Vidas (Com Benefício)</p><p class="text-xl font-bold" id="count-total">0</p></div>
+                <div onclick="setFilter('titulares')" class="card-filtro bg-white p-4 border-l-4 border-blue-500 shadow-sm"><p class="text-[10px] uppercase text-blue-500 font-bold">Titulares Ativos</p><p class="text-xl font-bold text-blue-600" id="count-titulares">0</p></div>
                 <div onclick="setFilter('dependentes')" class="card-filtro bg-white p-4 border-l-4 border-teal-500 shadow-sm"><p class="text-[10px] uppercase text-teal-400 font-bold">Dependentes</p><p class="text-xl font-bold text-teal-600" id="count-dependentes">0</p></div>
-                <div onclick="setFilter('sem_plano')" class="card-filtro bg-slate-50 p-4 border-l-4 border-slate-400 shadow-sm"><p class="text-[10px] uppercase text-slate-500 font-bold">Sem Plano (Ativos)</p><p class="text-xl font-bold text-slate-700" id="count-sem-plano">0</p></div>
+                <div onclick="setFilter('sem_plano')" class="card-filtro bg-slate-50 p-4 border-l-4 border-slate-400 shadow-sm"><p class="text-[10px] uppercase text-slate-500 font-bold">Sem Nenhum Plano</p><p class="text-xl font-bold text-slate-700" id="count-sem-plano">0</p></div>
                 <div onclick="setFilter('inclusao')" class="card-filtro bg-white p-4 border-l-4 border-amber-500 shadow-sm"><p class="text-[10px] uppercase text-amber-500 font-bold">Em Inclusão</p><p class="text-xl font-bold text-amber-600" id="count-inclusao">0</p></div>
-                <div class="card-filtro bg-white p-4 border-l-4 border-red-500 shadow-sm cursor-default"><p class="text-[10px] uppercase text-red-500 font-bold">Custo Empresa (Est.)</p><p class="text-xl font-bold text-red-600" id="count-custo-empresa">R$ 0,00</p></div>
-                <div class="card-filtro bg-white p-4 border-l-4 border-emerald-500 shadow-sm cursor-default"><p class="text-[10px] uppercase text-emerald-500 font-bold">Desconto Folha (Est.)</p><p class="text-xl font-bold text-emerald-600" id="count-desc-folha">R$ 0,00</p></div>
             </div>
 
             <div class="bg-white p-4 rounded-xl shadow-sm mb-6 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div class="w-full md:w-1/3 relative"><i class="fas fa-search absolute left-3 top-3 text-slate-400"></i><input type="text" id="searchInput" class="w-full pl-10 pr-4 py-2 border rounded-lg outline-none" placeholder="Nome, CPF, Plano..."></div>
                 <div class="flex flex-wrap gap-2 items-center w-full md:w-auto justify-end">
-                    <select id="filterPlano" class="bg-slate-100 border p-2 rounded text-sm outline-none"><option value="todos">Todos os Planos</option><option value="Sem_Plano">Sem Assistência Médica</option><option value="S80_Enfermaria">S80 Enfermaria</option><option value="S380_QC">S380 QC</option><option value="S380_QP">S380 QP</option><option value="S450_QC">S450 QC</option><option value="S450_QP">S450 QP</option><option value="S750">S750</option><option value="Amil_One_S1500">Amil One S1500</option><option value="Basico">Plano Básico</option><option value="Premium">Plano Premium</option></select>
+                    <select id="filterPlano" class="bg-slate-100 border p-2 rounded text-sm outline-none"><option value="todos">Todos (Com Algum Benefício)</option><option value="todos_geral">Todos (Base Completa)</option><option value="Sem_Plano">Sem Nenhum Plano</option><option value="S80_Enfermaria">Saúde: S80 Enfermaria</option><option value="S380_QC">Saúde: S380 QC</option><option value="S380_QP">Saúde: S380 QP</option><option value="S450_QC">Saúde: S450 QC</option><option value="S450_QP">Saúde: S450 QP</option><option value="S750">Saúde: S750</option><option value="Amil_One_S1500">Saúde: Amil One S1500</option><option value="Amil_Odonto">Apenas com Odonto</option></select>
                     <select id="filterSituacao" class="bg-slate-100 border p-2 rounded text-sm outline-none"><option value="ativos">Ativos (Folha)</option><option value="inclusao">Aguardando Inclusão</option><option value="desligados">A Excluir (Desligados)</option><option value="todos">Todos</option></select>
                     <input type="hidden" id="filterStatus" value="todos"> 
                     <input type="file" id="csvInput" accept=".csv" class="hidden">
                     
+                    <button onclick="abrirConsultaDesligamento()" class="bg-rose-600 hover:bg-rose-700 transition-colors text-white px-3 py-2 rounded text-xs shadow-sm" title="Consultar se o colaborador possui plano antes de efetivar o desligamento"><i class="fas fa-user-slash mr-1"></i> Check Desligamento</button>
+                    <button onclick="exportarBaseCompleta()" class="bg-purple-600 hover:bg-purple-700 transition-colors text-white px-3 py-2 rounded text-xs shadow-sm"><i class="fas fa-file-export mr-1"></i> Backup Base (CSV)</button>
                     <button onclick="document.getElementById('csvInput').click()" class="bg-emerald-600 hover:bg-emerald-700 transition-colors text-white px-3 py-2 rounded text-xs shadow-sm"><i class="fas fa-file-csv mr-1"></i> Importar Fatura</button>
-                    <button onclick="abrirAuditoria()" class="bg-indigo-600 hover:bg-indigo-700 transition-colors text-white px-3 py-2 rounded text-xs shadow-sm"><i class="fas fa-clipboard-check mr-1"></i> Auditoria (RH)</button>
+                    <button onclick="abrirAuditoria()" class="bg-indigo-600 hover:bg-indigo-700 transition-colors text-white px-3 py-2 rounded text-xs shadow-sm"><i class="fas fa-clipboard-check mr-1"></i> Gestão Lote/Auditoria</button>
                     <button onclick="openModal()" class="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-3 py-2 rounded text-xs"><i class="fas fa-plus mr-1"></i> Adicionar Vida</button>
                 </div>
             </div>
 
-            <!-- Painel de Acompanhamento (Movimentações) -->
+            <!-- Painel de Acompanhamento (Movimentações e Histórico) -->
             <div id="painelAcompanhamentoContainer" class="mb-6 hidden">
                 <div class="bg-white border-2 border-amber-200 rounded-xl shadow-sm overflow-hidden">
-                    <div class="bg-amber-50 px-4 py-3 flex justify-between items-center cursor-pointer border-b border-amber-100" onclick="document.getElementById('tabelaAndamento').classList.toggle('hidden')">
-                        <h3 class="font-bold text-amber-800 text-sm"><i class="fas fa-headset mr-2"></i> Painel de Movimentações (Aguardando Corretora)</h3>
-                        <div class="flex items-center gap-3">
-                            <span id="badgeAndamento" class="bg-amber-600 text-white text-xs font-bold px-2 py-1 rounded-full">0 pendentes</span>
-                            <i class="fas fa-chevron-down text-amber-600"></i>
+                    <div id="headerPainelMov" class="bg-amber-50 px-4 py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center cursor-pointer border-b border-amber-100 gap-3" onclick="toggleTabelaAndamento(event)">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <h3 class="font-bold text-slate-800 text-sm whitespace-nowrap"><i class="fas fa-headset mr-1 text-slate-500"></i> Gestão de Movimentações</h3>
+                            <select id="filtroStatusMov" class="bg-white border border-slate-300 text-slate-700 text-xs rounded px-2 py-1 outline-none font-bold shadow-sm cursor-pointer">
+                                <option value="pendente">Aguardando Corretora (Pendentes)</option>
+                                <option value="historico">Histórico (Concluídos / Cancelados)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button onclick="exportarRelatorioMovimentacoes()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1 rounded text-xs font-bold transition-colors shadow-sm" title="Exportar visualização atual para Excel">
+                                <i class="fas fa-file-excel mr-1"></i> Exportar
+                            </button>
+                            <button id="btnEmailGeralMov" onclick="enviarEmailGeralCorretora()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-bold transition-colors shadow-sm" title="Enviar e-mail dos pendentes para a Corretora">
+                                <i class="fas fa-envelope-open-text mr-1"></i> E-mail Geral
+                            </button>
+                            <span id="badgeAndamento" class="bg-amber-600 text-white text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap">0 ticket(s)</span>
+                            <i class="fas fa-chevron-down text-slate-400"></i>
                         </div>
                     </div>
                     <div id="tabelaAndamento" class="overflow-x-auto p-0 hidden">
                         <table class="w-full text-left border-collapse text-sm">
                             <thead>
-                                <tr class="bg-amber-50/50 text-amber-700 text-xs uppercase font-semibold border-b border-amber-100">
+                                <tr class="bg-slate-50 text-slate-500 text-xs uppercase font-semibold border-b border-slate-200">
                                     <th class="px-4 py-3">Beneficiário / SLA</th>
                                     <th class="px-4 py-3">Tipo de Movimentação</th>
                                     <th class="px-4 py-3">Observações / Protocolo</th>
-                                    <th class="px-4 py-3">Ações / Cobrança</th>
+                                    <th class="px-4 py-3">Ações / Ticket</th>
                                 </tr>
                             </thead>
-                            <tbody id="tbodyAndamento" class="divide-y divide-amber-50"></tbody>
+                            <tbody id="tbodyAndamento" class="divide-y divide-slate-100"></tbody>
                         </table>
                     </div>
                 </div>
@@ -124,10 +137,8 @@
                         <thead>
                             <tr class="bg-slate-50 border-b text-xs uppercase text-slate-500 font-semibold">
                                 <th class="px-6 py-4">Colaborador / Contato</th>
-                                <th class="px-6 py-4 text-center">Assistência / Plano</th>
+                                <th class="px-6 py-4 text-center">Benefícios Ativos</th>
                                 <th class="px-6 py-4 text-center">Vidas</th>
-                                <th class="px-6 py-4 text-center text-red-600">Custo Empresa</th>
-                                <th class="px-6 py-4 text-center text-emerald-600">Desc. Folha</th>
                                 <th class="px-6 py-4 text-center">Status</th>
                                 <th class="px-6 py-4 text-center">Ações</th>
                             </tr>
@@ -147,25 +158,60 @@
                 <input type="hidden" id="editId">
                 <input type="hidden" id="existingFileUrl">
                 
-                <div class="flex gap-4">
-                    <div class="w-1/4"><label class="text-xs font-bold text-slate-600">Status Folha/RH</label><select id="inpStatus" class="w-full border p-2 rounded outline-none bg-blue-50 font-semibold text-blue-800"><option value="ativo">Ativo na Empresa</option><option value="inclusao">Em Inclusão (Pendente)</option><option value="desligado">A Excluir (Desligado)</option></select></div>
-                    <div class="w-1/4"><label class="text-xs font-bold text-slate-600">Operadora/Plano</label><select id="inpPlano" class="w-full border p-2 rounded outline-none font-semibold text-slate-700"><option value="Sem_Plano" class="text-slate-500">NENHUM (Sem Assistência)</option><option value="S80_Enfermaria">S80 - Enfermaria (Regional)</option><option value="S380_QC">S380 QC - Enfermaria (Nacional)</option><option value="S380_QP">S380 QP - Apartamento (Nacional)</option><option value="S450_QC">S450 QC - Enfermaria (Nacional)</option><option value="S450_QP">S450 QP - Apartamento (Nacional)</option><option value="S750">S750 - Apartamento (Nacional)</option><option value="Amil_One_S1500">AMIL ONE S1500 - Apartamento (Nacional)</option><option value="Basico">Outro - Básico</option><option value="Premium">Outro - Premium</option></select></div>
-                    <div class="w-2/4"><label class="text-xs font-bold text-slate-600">Termo / Aceite ou Recusa (PDF)</label><input type="file" id="inpFile" class="w-full text-xs border p-1 rounded outline-none bg-slate-50"><div id="filePreviewLink" class="hidden text-xs mt-1"><a href="#" target="_blank" class="text-blue-600 font-medium hover:underline"><i class="fas fa-external-link-alt"></i> Ver Termo Anexado</a></div></div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 bg-blue-50/30 p-3 rounded-lg border border-blue-100">
+                    <div class="col-span-1">
+                        <label class="text-xs font-bold text-slate-600">Status Folha/RH</label>
+                        <select id="inpStatus" class="w-full border p-2 rounded outline-none font-semibold text-blue-800 bg-white">
+                            <option value="ativo">Ativo na Empresa</option>
+                            <option value="inclusao">Em Inclusão (Pendente)</option>
+                            <option value="desligado">A Excluir (Desligado)</option>
+                        </select>
+                    </div>
+                    <div class="col-span-1">
+                        <label class="text-xs font-bold text-slate-600">Plano de Saúde</label>
+                        <select id="inpPlano" class="w-full border p-2 rounded outline-none font-semibold text-slate-700 bg-white">
+                            <option value="Sem_Plano" class="text-slate-500">NENHUM (Sem Saúde)</option>
+                            <option value="S80_Enfermaria">S80 - Enfermaria</option>
+                            <option value="S380_QC">S380 QC - Enfermaria</option>
+                            <option value="S380_QP">S380 QP - Apartamento</option>
+                            <option value="S450_QC">S450 QC - Enfermaria</option>
+                            <option value="S450_QP">S450 QP - Apartamento</option>
+                            <option value="S750">S750 - Apartamento</option>
+                            <option value="Amil_One_S1500">AMIL ONE S1500</option>
+                            <option value="Basico">Outro - Básico</option>
+                            <option value="Premium">Outro - Premium</option>
+                        </select>
+                    </div>
+                    <div class="col-span-1">
+                        <label class="text-xs font-bold text-slate-600">Plano Odontológico</label>
+                        <select id="inpPlanoOdonto" class="w-full border p-2 rounded outline-none font-semibold text-slate-700 bg-white">
+                            <option value="Sem_Plano" class="text-slate-500">NENHUM (Sem Odonto)</option>
+                            <option value="Amil_Odonto">Amil Dental / Odonto</option>
+                            <option value="Outro_Odonto">Outro Plano Odonto</option>
+                        </select>
+                    </div>
+                    <div class="col-span-1">
+                        <label class="text-xs font-bold text-slate-600">Termo Assinado (PDF)</label>
+                        <input type="file" id="inpFile" class="w-full text-xs border p-1.5 rounded outline-none bg-white">
+                        <div id="filePreviewLink" class="hidden text-xs mt-1"><a href="#" target="_blank" class="text-blue-600 font-medium hover:underline"><i class="fas fa-external-link-alt"></i> Ver Termo Anexado</a></div>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 bg-slate-50 p-3 rounded-lg border border-slate-200">
                     <div class="md:col-span-2"><label class="text-xs font-bold text-slate-600">Nome do Titular</label><input id="inpNome" class="border p-2 rounded w-full outline-none bg-white"></div>
                     <div><label class="text-xs font-bold text-slate-600">Matrícula</label><input id="inpMatricula" class="border p-2 rounded w-full outline-none font-mono bg-white" placeholder="Ex: 12345"></div>
-                    <div><label class="text-xs font-bold text-slate-600">Carteirinha (Código)</label><input id="inpCarteirinha" class="border p-2 rounded w-full outline-none font-mono text-sm bg-white" placeholder="000.0000.00"></div>
-                    
                     <div><label class="text-xs font-bold text-slate-600">CPF</label><input id="inpCPF" oninput="mascaraCPF(this)" class="border p-2 rounded w-full outline-none bg-white" maxlength="14"></div>
+                    
+                    <div><label class="text-xs font-bold text-slate-600">Carteirinha SAÚDE</label><input id="inpCarteirinha" class="border p-2 rounded w-full outline-none font-mono text-sm bg-white" placeholder="000.0000.00"></div>
+                    <div><label class="text-xs font-bold text-slate-600">Carteirinha ODONTO</label><input id="inpCarteirinhaOdonto" class="border p-2 rounded w-full outline-none font-mono text-sm bg-white" placeholder="000.0000.00"></div>
+                    
                     <div><label class="text-xs font-bold text-slate-600">Idade</label><input type="number" id="inpIdade" class="border p-2 rounded w-full outline-none bg-white" min="0"></div>
-                    <div><label class="text-xs font-bold text-slate-600">Dependência</label><input id="inpDependencia" class="border p-2 rounded w-full outline-none bg-white" value="Titular"></div>
                     <div><label class="text-xs font-bold text-slate-600">WhatsApp / Tel</label><input id="inpTelefone" class="border p-2 rounded w-full outline-none bg-white"></div>
                     
                     <div><label class="text-xs font-bold text-slate-600">Data Inclusão</label><input type="date" id="inpDataInclusao" class="border p-2 rounded w-full outline-none text-sm text-slate-700 bg-white"></div>
                     <div><label class="text-xs font-bold text-red-500">Data Exclusão</label><input type="date" id="inpDataExclusao" class="border p-2 rounded w-full outline-none text-sm text-red-700 bg-red-50"></div>
                     <div class="md:col-span-2"><label class="text-xs font-bold text-slate-600">Cargo / Função</label><input id="inpCargo" class="border p-2 rounded w-full outline-none bg-white" placeholder="Ex: Analista de RH"></div>
+                    <input type="hidden" id="inpDependencia" value="Titular">
                 </div>
 
                 <!-- Sessão de Custos e Dependentes -->
@@ -175,11 +221,11 @@
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="flex flex-col"><label class="text-xs font-bold text-slate-500 mb-1 ml-1">Qtd Vidas (Titular + Dep.)</label><input type="number" id="inpQtdVidas" class="border p-2 rounded text-sm outline-none text-slate-700 bg-white" min="1" value="1"></div>
-                        <div class="flex flex-col"><label class="text-xs font-bold text-slate-500 mb-1 ml-1">Total Família / Valor Fatura (R$)</label><input type="number" step="0.01" id="inpValorFatura" class="border p-2 rounded text-sm outline-none text-slate-700 bg-white" placeholder="0.00"></div>
+                        <div class="flex flex-col"><label class="text-xs font-bold text-slate-500 mb-1 ml-1">Qtd Vidas Total (Titular + Dep.)</label><input type="number" id="inpQtdVidas" class="border p-2 rounded text-sm outline-none text-slate-700 bg-white" min="1" value="1"></div>
+                        <div class="flex flex-col"><label class="text-xs font-bold text-slate-500 mb-1 ml-1">Total Família Saúde (R$)</label><input type="number" step="0.01" id="inpValorFatura" class="border p-2 rounded text-sm outline-none text-slate-700 bg-white" placeholder="0.00"></div>
                         
                         <div class="flex flex-col bg-indigo-50 p-2 rounded border border-indigo-100 shadow-inner">
-                            <span id="lblSimulacao" class="text-[10px] font-bold text-indigo-800 uppercase mb-1">Cálculo de Custeio</span>
+                            <span id="lblSimulacao" class="text-[10px] font-bold text-indigo-800 uppercase mb-1">Cálculo Estimado de Custeio</span>
                             <div class="flex justify-between text-xs text-indigo-600"><span>Empresa:</span> <span id="simEmpresa" class="font-bold">R$ 0,00</span></div>
                             <div class="flex justify-between text-xs text-indigo-600"><span>Colaborador:</span> <span id="simColaborador" class="font-bold">R$ 0,00</span></div>
                         </div>
@@ -193,7 +239,7 @@
                     <div class="flex flex-wrap gap-2 mb-3 bg-teal-50 p-3 rounded-lg border border-teal-100 items-end">
                         <div class="flex-1 min-w-[150px]"><label class="text-[10px] font-bold text-slate-600">Nome do Dependente</label><input type="text" id="depNome" class="border p-2 rounded w-full text-xs outline-none bg-white"></div>
                         <div class="w-32"><label class="text-[10px] font-bold text-slate-600">CPF</label><input type="text" id="depCPF" oninput="mascaraCPF(this)" maxlength="14" class="border p-2 rounded w-full text-xs outline-none bg-white"></div>
-                        <div class="w-32"><label class="text-[10px] font-bold text-slate-600">Carteirinha</label><input type="text" id="depCarteirinha" class="border p-2 rounded w-full text-xs outline-none bg-white"></div>
+                        <div class="w-32"><label class="text-[10px] font-bold text-slate-600">Carteirinha (Saúde/Odonto)</label><input type="text" id="depCarteirinha" class="border p-2 rounded w-full text-xs outline-none bg-white"></div>
                         <button type="button" onclick="adicionarDependenteManual()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded text-xs font-bold transition-colors shadow-sm">Adicionar</button>
                     </div>
 
@@ -215,35 +261,65 @@
         </div>
     </div>
 
-    <!-- Modal Auditoria de Cobertura -->
+    <!-- Modal Auditoria de Cobertura / Lote -->
     <div id="modalAuditoria" class="fixed inset-0 bg-black/50 tela-oculta flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl p-6 overflow-y-auto max-h-[90vh]">
-            <h3 class="font-bold text-xl mb-2 text-indigo-800 border-b pb-2"><i class="fas fa-clipboard-check mr-2"></i> Auditoria de Cobertura (Cruzamento de Folha)</h3>
-            <p class="text-sm text-slate-600 mb-4">Cole abaixo a lista dos colaboradores ativos (Nome e CPF) extraídos do seu sistema de Folha. O sistema irá verificar quem não tem plano e permitir adicioná-los à base com o status "Sem Plano".</p>
+            <h3 class="font-bold text-xl mb-4 text-indigo-800 border-b pb-2"><i class="fas fa-tasks mr-2"></i> Gestão em Lote e Auditoria</h3>
+            
+            <div class="mb-4 bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                <label class="text-xs font-bold text-indigo-900 mb-1 block">O que deseja fazer?</label>
+                <select id="tipoAuditoria" onchange="mudarTipoAuditoria()" class="w-full bg-white border border-indigo-200 rounded p-2 text-sm outline-none font-bold text-indigo-700 shadow-sm">
+                    <option value="ausentes">1. Verificar Ausentes (Cruzar Folha: Nome + CPF)</option>
+                    <option value="odonto">2. Preencher Carteirinhas Odonto (CPF + Carteirinha Odonto)</option>
+                </select>
+            </div>
+
+            <p id="auditoriaHint" class="text-sm text-slate-600 mb-4">Cole abaixo a lista dos colaboradores ativos (Nome e CPF) extraídos do seu sistema de Folha. O sistema irá verificar quem não tem nenhum plano e permitir adicioná-los à base com o status "Sem Plano".</p>
             
             <textarea id="auditoriaInput" rows="6" class="w-full border border-slate-300 rounded-lg p-3 text-sm outline-none focus:border-indigo-500 font-mono bg-slate-50" placeholder="Exemplo copiando e colando do Excel:&#10;João Silva    111.222.333-44&#10;Maria Santos  555.666.777-88"></textarea>
             
             <div class="flex justify-end mt-3 mb-4">
-                <button onclick="processarAuditoria()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-sm"><i class="fas fa-search mr-1"></i> Cruzar Dados</button>
+                <button onclick="processarAuditoria()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold transition-colors shadow-sm"><i class="fas fa-search mr-1"></i> Processar Dados</button>
             </div>
 
             <div id="resultadoAuditoria" class="hidden flex-col gap-4 border-t pt-4">
                 <div class="grid grid-cols-3 gap-4">
-                    <div class="bg-slate-100 p-3 rounded-lg border border-slate-200 text-center"><p class="text-[10px] text-slate-500 uppercase font-bold">Lidos na Folha</p><p id="audTotal" class="text-3xl font-black text-slate-800">0</p></div>
-                    <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-200 text-center"><p class="text-[10px] text-emerald-700 uppercase font-bold">Na Base (Com ou Sem Plano)</p><p id="audComPlano" class="text-3xl font-black text-emerald-700">0</p></div>
-                    <div class="bg-red-50 p-3 rounded-lg border border-red-200 text-center"><p class="text-[10px] text-red-700 uppercase font-bold">Ausentes do Painel</p><p id="audSemPlano" class="text-3xl font-black text-red-700">0</p></div>
+                    <div class="bg-slate-100 p-3 rounded-lg border border-slate-200 text-center"><p id="lblAud1" class="text-[10px] text-slate-500 uppercase font-bold">Lidos na Folha</p><p id="audTotal" class="text-3xl font-black text-slate-800">0</p></div>
+                    <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-200 text-center"><p id="lblAud2" class="text-[10px] text-emerald-700 uppercase font-bold">Na Base (Com Saúde ou Odonto)</p><p id="audComPlano" class="text-3xl font-black text-emerald-700">0</p></div>
+                    <div class="bg-red-50 p-3 rounded-lg border border-red-200 text-center"><p id="lblAud3" class="text-[10px] text-red-700 uppercase font-bold">Ausentes do Painel</p><p id="audSemPlano" class="text-3xl font-black text-red-700">0</p></div>
                 </div>
                 <div>
                     <div class="flex justify-between items-center mb-2">
-                        <h4 class="font-bold text-sm text-slate-700">Colaboradores ausentes do painel:</h4>
-                        <button id="btnCadastrarFaltantes" onclick="cadastrarFaltantes()" class="hidden bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded text-xs font-bold transition-colors shadow-sm"><i class="fas fa-user-plus mr-1"></i> Cadastrar na Base (Sem Plano)</button>
+                        <h4 id="lblAud4" class="font-bold text-sm text-slate-700">Colaboradores ausentes do painel:</h4>
+                        <button id="btnCadastrarFaltantes" onclick="executarAcaoAuditoria()" class="hidden bg-slate-800 hover:bg-slate-900 text-white px-3 py-1.5 rounded text-xs font-bold transition-colors shadow-sm"></button>
                     </div>
-                    <div id="listaSemCobertura" class="border border-slate-200 rounded-lg max-h-48 overflow-y-auto bg-white divide-y divide-slate-100"></div>
+                    <div id="listaSemCobertura" class="border border-slate-200 rounded-lg max-h-48 overflow-y-auto bg-white"></div>
                 </div>
             </div>
 
             <div class="flex justify-end gap-2 mt-6 border-t pt-4">
-                <button onclick="fecharAuditoria()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded font-medium transition-colors text-slate-700">Fechar Auditoria</button>
+                <button onclick="fecharAuditoria()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded font-medium transition-colors text-slate-700">Fechar Janela</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Consulta Desligamento -->
+    <div id="modalConsultaDesligamento" class="fixed inset-0 bg-black/50 tela-oculta flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl p-6">
+            <h3 class="font-bold text-xl mb-2 text-rose-700 border-b pb-2"><i class="fas fa-user-slash mr-2"></i> Consulta Rápida para Desligamento</h3>
+            <p class="text-sm text-slate-600 mb-4">Pesquise o colaborador para verificar se ele possui assistência ativa antes de prosseguir com o desligamento na contabilidade/RH.</p>
+            
+            <div class="relative mb-4">
+                <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
+                <input type="text" id="inputBuscaDesligamento" oninput="pesquisarParaDesligamento()" class="w-full pl-10 pr-4 py-2 border border-rose-300 rounded-lg outline-none focus:ring-2 focus:ring-rose-500 bg-rose-50 font-medium text-slate-700" placeholder="Digite o Nome, CPF ou Matrícula do colaborador...">
+            </div>
+
+            <div id="resultadoBuscaDesligamento" class="max-h-80 overflow-y-auto border border-slate-200 rounded-lg bg-slate-50 divide-y divide-slate-200 shadow-inner">
+                <div class="p-4 text-center text-slate-400 text-sm">Digite pelo menos 3 caracteres acima para pesquisar...</div>
+            </div>
+
+            <div class="flex justify-end mt-4 pt-4 border-t border-slate-100">
+                <button onclick="fecharConsultaDesligamento()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded font-medium transition-colors text-slate-700">Fechar Janela</button>
             </div>
         </div>
     </div>
@@ -264,9 +340,9 @@
                     <div>
                         <label class="text-xs font-bold text-slate-600">O que deseja solicitar?</label>
                         <select id="movTipo" class="w-full border p-2 rounded outline-none font-medium">
-                            <option value="Adesão (Novo Titular)">Adesão (Novo Titular)</option>
+                            <option value="Adesão Saúde/Odonto">Adesão (Novo Titular)</option>
                             <option value="Inclusão de Dependente">Inclusão de Dependente</option>
-                            <option value="Exclusão de Titular">Exclusão de Titular</option>
+                            <option value="Exclusão de Titular (Saúde e/ou Odonto)">Exclusão de Titular (Saúde e/ou Odonto)</option>
                             <option value="Exclusão de Dependente">Exclusão de Dependente</option>
                             <option value="Upgrade de Plano">Upgrade de Plano</option>
                             <option value="Downgrade de Plano">Downgrade de Plano</option>
@@ -308,9 +384,53 @@
         </div>
     </div>
 
+    <!-- Dialog Customizado (Substituto de Alert/Confirm) -->
+    <div id="customDialog" class="fixed inset-0 bg-black/60 tela-oculta flex items-center justify-center p-4 z-[9999]">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 max-w-sm w-full text-center transform transition-all">
+            <div id="dialogIcon" class="text-5xl mb-4"></div>
+            <h3 id="dialogTitle" class="font-bold text-xl mb-2 text-slate-800"></h3>
+            <p id="dialogMessage" class="text-sm text-slate-600 mb-6 whitespace-pre-line"></p>
+            <div class="flex justify-center gap-3" id="dialogButtons"></div>
+        </div>
+    </div>
+
     <script type="module">
         window.onerror = function(msg, url, line) { document.getElementById('systemStatus').style.display = 'flex'; document.getElementById('statusText').innerHTML = `<span style='color:red; font-size:20px'>ERRO FATAL NO SCRIPT!</span><br>Linha: ${line}<br>${msg}`; return true; };
         window.mascaraCPF = function(i){ var v = i.value; v = v.replace(/\D/g,""); v = v.replace(/(\d{3})(\d)/,"$1.$2"); v = v.replace(/(\d{3})(\d)/,"$1.$2"); v = v.replace(/(\d{3})(\d{1,2})$/,"$1-$2"); i.value = v; }
+
+        window.toggleTabelaAndamento = (e) => {
+            if(e.target.tagName === 'SELECT' || e.target.closest('select') || e.target.closest('button')) return;
+            document.getElementById('tabelaAndamento').classList.toggle('hidden');
+        };
+
+        // --- Substitutos para Alert e Confirm Nativos bloqueados por iFrame ---
+        window.closeDialog = () => document.getElementById('customDialog').classList.add('tela-oculta');
+        
+        window.alert = function(msg) {
+            document.getElementById('dialogTitle').innerText = 'Aviso';
+            document.getElementById('dialogIcon').innerHTML = '<i class="fas fa-info-circle text-blue-500"></i>';
+            document.getElementById('dialogMessage').innerText = msg;
+            document.getElementById('dialogButtons').innerHTML = `<button onclick="closeDialog()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold transition-colors shadow-sm">OK</button>`;
+            document.getElementById('customDialog').classList.remove('tela-oculta');
+        };
+
+        window.customConfirm = function(msg, onConfirm, onCancel) {
+            document.getElementById('dialogTitle').innerText = 'Confirmar Ação';
+            document.getElementById('dialogIcon').innerHTML = '<i class="fas fa-exclamation-triangle text-amber-500"></i>';
+            document.getElementById('dialogMessage').innerText = msg;
+            
+            window._pendingConfirm = onConfirm;
+            window._pendingCancel = onCancel;
+            
+            document.getElementById('dialogButtons').innerHTML = `
+                <button onclick="executeCancel()" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg font-bold transition-colors text-slate-700">Cancelar</button>
+                <button onclick="executeConfirm()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold transition-colors shadow-sm">Sim, Confirmar</button>
+            `;
+            document.getElementById('customDialog').classList.remove('tela-oculta');
+        };
+
+        window.executeConfirm = () => { closeDialog(); if(typeof window._pendingConfirm === 'function') window._pendingConfirm(); };
+        window.executeCancel = () => { closeDialog(); if(typeof window._pendingCancel === 'function') window._pendingCancel(); };
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -318,12 +438,13 @@
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyA1lp0nx8jKLNPwbh18vEVZo0Gqv_oxI2E",
-            authDomain: "appaso-myb.firebaseapp.com",
-            projectId: "appaso-myb",
-            storageBucket: "appaso-myb.firebasestorage.app",
-            messagingSenderId: "370245082065",
-            appId: "1:370245082065:web:555feb9a3882fec5361ef0"
+            apiKey: "AIzaSyACvFlrgb_rNzUy_Fh8DpzUovm1NsYclH4",
+  authDomain: "gestao-beneficios-myb.firebaseapp.com",
+  projectId: "gestao-beneficios-myb",
+  storageBucket: "gestao-beneficios-myb.firebasestorage.app",
+  messagingSenderId: "621485141601",
+  appId: "1:621485141601:web:8102a84f4f516955150420",
+  measurementId: "G-TNJLYM5LCW"
         };
 
         try {
@@ -333,7 +454,8 @@
             const colRef = collection(db, "gestao_beneficios_saude");
             let globalData = []; let unsubscribe = null;
             window.currentDependentes = [];
-            window.faltantesParaCadastro = []; // Array para o botão de auditoria
+            window.faltantesParaCadastro = []; 
+            window.itensParaAtualizarOdonto = [];
 
             onAuthStateChanged(auth, (user) => {
                 if (user) {
@@ -427,49 +549,58 @@
             };
 
             // Calculadora Matemática de Custeios
-            function calcularCusteio(plano, qtdVidas, valFatura) {
+            function calcularCusteio(planoSaude, planoOdonto, qtdVidas, valFatura) {
                 let vidas = parseInt(qtdVidas) || 1;
                 let faturaOriginal = parseFloat(valFatura) || 0;
                 let descontoFolha = 0;
                 let custoEmpresa = 0;
-                let faturaTotalCalculada = 0;
+                let faturaSaude = 0;
+                
+                // Custo Odonto Estimado (Padrão RH Ex: Amil Odonto R$ 25 descontado 100% folha)
+                let custoOdonto = 0;
+                if (planoOdonto && planoOdonto === 'Amil_Odonto') {
+                    custoOdonto = vidas * 20.00; // Valor arbitrário genérico
+                    descontoFolha += custoOdonto;
+                }
 
-                if (plano === 'Sem_Plano') {
-                    // Colaborador ativo, mas sem assistência médica (0 custos)
-                    return { descontoFolha: 0, custoEmpresa: 0, fatura: 0, vidas: 1 };
-                } else if (plano === 'S80_Enfermaria') {
+                if (planoSaude === 'Sem_Plano' || !planoSaude) {
+                    // Sem Saúde, apenas computa o odonto calculado acima
+                    return { descontoFolha: descontoFolha, custoEmpresa: 0, fatura: faturaOriginal, vidas: vidas, temOdonto: custoOdonto > 0 };
+                } else if (planoSaude === 'S80_Enfermaria') {
                     let custoVida = 416.16;
-                    faturaTotalCalculada = vidas * custoVida;
+                    faturaSaude = vidas * custoVida;
                     custoEmpresa = vidas * 208.08;
-                    descontoFolha = faturaTotalCalculada - custoEmpresa;
-                } else if (['S380_QC', 'S380_QP', 'S450_QC', 'S450_QP', 'S750'].includes(plano)) {
+                    descontoFolha += (faturaSaude - custoEmpresa);
+                } else if (['S380_QC', 'S380_QP', 'S450_QC', 'S450_QP', 'S750'].includes(planoSaude)) {
                     let custoTotalVida = 0;
                     let empPagaTitular = 0;
                     let empPagaDependente = 0;
 
-                    if (plano === 'S380_QC') { custoTotalVida = 591.69; empPagaTitular = 177.51; empPagaDependente = 118.34; }
-                    else if (plano === 'S380_QP') { custoTotalVida = 650.82; empPagaTitular = 195.25; empPagaDependente = 130.16; }
-                    else if (plano === 'S450_QC') { custoTotalVida = 671.41; empPagaTitular = 201.42; empPagaDependente = 134.28; }
-                    else if (plano === 'S450_QP') { custoTotalVida = 738.54; empPagaTitular = 221.56; empPagaDependente = 147.71; }
-                    else if (plano === 'S750') { custoTotalVida = 1023.09; empPagaTitular = 306.93; empPagaDependente = 204.62; }
+                    if (planoSaude === 'S380_QC') { custoTotalVida = 591.69; empPagaTitular = 177.51; empPagaDependente = 118.34; }
+                    else if (planoSaude === 'S380_QP') { custoTotalVida = 650.82; empPagaTitular = 195.25; empPagaDependente = 130.16; }
+                    else if (planoSaude === 'S450_QC') { custoTotalVida = 671.41; empPagaTitular = 201.42; empPagaDependente = 134.28; }
+                    else if (planoSaude === 'S450_QP') { custoTotalVida = 738.54; empPagaTitular = 221.56; empPagaDependente = 147.71; }
+                    else if (planoSaude === 'S750') { custoTotalVida = 1023.09; empPagaTitular = 306.93; empPagaDependente = 204.62; }
 
-                    faturaTotalCalculada = vidas * custoTotalVida;
+                    faturaSaude = vidas * custoTotalVida;
                     let numDep = vidas > 1 ? vidas - 1 : 0;
                     
                     custoEmpresa = empPagaTitular + (numDep * empPagaDependente);
-                    descontoFolha = faturaTotalCalculada - custoEmpresa;
-                } else if (plano === 'Amil_One_S1500') {
-                    descontoFolha = vidas * 1504.90;
-                    faturaTotalCalculada = faturaOriginal || descontoFolha;
-                    custoEmpresa = faturaTotalCalculada - descontoFolha;
+                    descontoFolha += (faturaSaude - custoEmpresa);
+                } else if (planoSaude === 'Amil_One_S1500') {
+                    let descSaude = vidas * 1504.90;
+                    descontoFolha += descSaude;
+                    faturaSaude = faturaOriginal || descSaude;
+                    custoEmpresa = faturaSaude - descSaude;
                     if (custoEmpresa < 0) custoEmpresa = 0;
                 } else {
-                    descontoFolha = faturaOriginal / 2;
+                    descontoFolha += (faturaOriginal / 2);
                     custoEmpresa = faturaOriginal / 2;
-                    faturaTotalCalculada = faturaOriginal;
+                    faturaSaude = faturaOriginal;
                 }
 
-                return { descontoFolha, custoEmpresa, fatura: faturaTotalCalculada, vidas };
+                let faturaTotalCalculada = faturaSaude + custoOdonto;
+                return { descontoFolha, custoEmpresa, fatura: faturaTotalCalculada, vidas, temOdonto: custoOdonto > 0 };
             }
             
             window.renderTable = (data) => {
@@ -481,60 +612,119 @@
                 
                 let stats = { vidasTotais: 0, titulares: 0, dependentes: 0, inclusao: 0, excluidos: 0, custoEmpresa: 0, descFolha: 0, semPlano: 0 };
                 
+                // Lógica da Tabela de Movimentações / Histórico
+                const filtroMov = document.getElementById('filtroStatusMov') ? document.getElementById('filtroStatusMov').value : 'pendente';
+                
                 const pendentes = data.filter(item => {
                     if (item.movimentacao && item.movimentacao.status === 'Pendente') return true;
                     if (!item.movimentacao && (item.status === 'inclusao' || item.status === 'desligado')) return true;
                     return false;
                 });
 
+                const historico = data.filter(item => {
+                    return item.movimentacao && (item.movimentacao.status === 'Concluído' || item.movimentacao.status === 'Cancelado');
+                });
+
+                const listaExibicao = filtroMov === 'pendente' ? pendentes : historico;
+
                 const containerAndamento = document.getElementById('painelAcompanhamentoContainer');
                 const tbodyAndamento = document.getElementById('tbodyAndamento');
+                const badgeAndamento = document.getElementById('badgeAndamento');
+                const headerPainelMov = document.getElementById('headerPainelMov');
+                const btnEmailGeralMov = document.getElementById('btnEmailGeralMov');
                 
-                if (pendentes.length > 0) {
+                if (pendentes.length > 0 || historico.length > 0) {
                     containerAndamento.classList.remove('hidden');
-                    document.getElementById('badgeAndamento').innerText = pendentes.length + " ticket(s) pendente(s)";
+                    
+                    if (filtroMov === 'pendente') {
+                        badgeAndamento.innerText = pendentes.length + " pendente(s)";
+                        badgeAndamento.className = "bg-amber-600 text-white text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap";
+                        headerPainelMov.className = "bg-amber-50 px-4 py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center cursor-pointer border-b border-amber-100 gap-3";
+                        if(btnEmailGeralMov) btnEmailGeralMov.classList.remove('hidden');
+                    } else {
+                        badgeAndamento.innerText = historico.length + " registro(s)";
+                        badgeAndamento.className = "bg-slate-600 text-white text-xs font-bold px-2 py-1 rounded-full whitespace-nowrap";
+                        headerPainelMov.className = "bg-slate-100 px-4 py-3 flex flex-col sm:flex-row justify-between items-start sm:items-center cursor-pointer border-b border-slate-200 gap-3";
+                        if(btnEmailGeralMov) btnEmailGeralMov.classList.add('hidden');
+                    }
+
                     tbodyAndamento.innerHTML = '';
                     
-                    pendentes.forEach(row => {
-                        let tipoMov = '';
-                        let obsMov = '-';
-                        let prazoText = '';
-                        
-                        if (row.movimentacao && row.movimentacao.status === 'Pendente') {
-                            tipoMov = `<span class="text-amber-700 font-bold"><i class="fas fa-exchange-alt mr-1"></i> ${row.movimentacao.tipo}</span>`;
-                            obsMov = row.movimentacao.notas || '-';
-                            if (row.movimentacao.prazo) {
-                                let dtPrazo = new Date(row.movimentacao.prazo + 'T12:00:00');
-                                let dtHoje = new Date(); dtHoje.setHours(0,0,0,0);
-                                prazoText = `SLA: ${formatDateBR(row.movimentacao.prazo)}`;
-                                if (dtPrazo < dtHoje) prazoText += ` <span class="text-red-600 ml-1 font-bold"><i class="fas fa-exclamation-triangle"></i> Atrasado</span>`;
+                    if (listaExibicao.length === 0) {
+                        tbodyAndamento.innerHTML = `<tr><td colspan="4" class="px-4 py-6 text-center text-slate-500 text-sm">Nenhum registo encontrado nesta visualização.</td></tr>`;
+                    } else {
+                        listaExibicao.forEach(row => {
+                            let isConcluido = row.movimentacao && row.movimentacao.status === 'Concluído';
+                            let isCancelado = row.movimentacao && row.movimentacao.status === 'Cancelado';
+                            let isPendente = !isConcluido && !isCancelado;
+                            
+                            let tipoMov = '';
+                            let obsMov = '-';
+                            let prazoText = '';
+                            
+                            if (row.movimentacao) {
+                                obsMov = row.movimentacao.notas || '-';
+                                
+                                let corStatusTexto = isConcluido ? 'text-emerald-700' : (isCancelado ? 'text-slate-500' : 'text-amber-700');
+                                tipoMov = `<span class="${corStatusTexto} font-bold"><i class="fas fa-exchange-alt mr-1"></i> ${row.movimentacao.tipo}</span>`;
+                                
+                                if (isConcluido) tipoMov += `<div class="mt-1"><span class="bg-emerald-100 text-emerald-800 text-[9px] px-1.5 py-0.5 rounded uppercase font-bold"><i class="fas fa-check"></i> Concluído</span></div>`;
+                                if (isCancelado) tipoMov += `<div class="mt-1"><span class="bg-slate-200 text-slate-700 text-[9px] px-1.5 py-0.5 rounded uppercase font-bold"><i class="fas fa-ban"></i> Cancelado</span></div>`;
+                                
+                                if (row.movimentacao.prazo) {
+                                    let dtPrazo = new Date(row.movimentacao.prazo + 'T12:00:00');
+                                    let dtHoje = new Date(); dtHoje.setHours(0,0,0,0);
+                                    prazoText = `SLA: ${formatDateBR(row.movimentacao.prazo)}`;
+                                    if (dtPrazo < dtHoje && isPendente) prazoText += ` <span class="text-red-600 ml-1 font-bold"><i class="fas fa-exclamation-triangle"></i> Atrasado</span>`;
+                                } else {
+                                    prazoText = 'Sem prazo estipulado';
+                                }
                             } else {
-                                prazoText = 'Sem prazo estipulado';
+                                tipoMov = row.status === 'inclusao' ? '<span class="text-amber-600 font-bold"><i class="fas fa-plus-circle"></i> Inclusão Pendente</span>' : '<span class="text-red-600 font-bold"><i class="fas fa-minus-circle"></i> Exclusão Pendente</span>';
+                                prazoText = 'Sem ticket formal';
                             }
-                        } else {
-                            tipoMov = row.status === 'inclusao' ? '<span class="text-amber-600 font-bold"><i class="fas fa-plus-circle"></i> Inclusão Pendente</span>' : '<span class="text-red-600 font-bold"><i class="fas fa-minus-circle"></i> Exclusão Pendente</span>';
-                            prazoText = 'Sem ticket formal';
-                        }
-                        
-                        let msgWhats = encodeURIComponent(`Olá Corretora, gostaria de verificar o andamento da movimentação de ${row.nome}.`);
-                        let btnCobrar = `<button onclick="window.open('https://wa.me/?text=${msgWhats}', '_blank')" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1 rounded text-xs font-bold transition-colors shadow-sm" title="Cobrar pelo WhatsApp"><i class="fab fa-whatsapp"></i></button>`;
-                        
-                        let emailDestino = "relacionamento@hphealth.com.br";
-                        let emailSubject = encodeURIComponent(`Solicitação de ${row.movimentacao ? row.movimentacao.tipo : 'Movimentação'} - ${row.nome}`);
-                        let emailBody = encodeURIComponent(`Olá Equipe HP Health,\n\nSolicitamos a seguinte movimentação no plano de saúde:\n\nBeneficiário: ${row.nome}\nCPF: ${row.cpf || '-'}\nMatrícula: ${row.matricula || '-'}\nPlano: ${row.plano || '-'}\n\nTipo de Solicitação: ${row.movimentacao ? row.movimentacao.tipo : (row.status === 'inclusao' ? 'Inclusão' : 'Exclusão')}\nObservações / Detalhes: ${row.movimentacao ? (row.movimentacao.notas || 'Nenhuma') : 'Nenhuma'}\n\nFicamos no aguardo da tratativa e do número de protocolo.\n\nAtenciosamente.`);
-                        let btnEmail = `<button onclick="window.location.href='mailto:${emailDestino}?subject=${emailSubject}&body=${emailBody}'" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded text-xs font-bold transition-colors shadow-sm" title="Enviar pedido por E-mail"><i class="fas fa-envelope mr-1"></i> Pedir por E-mail</button>`;
-                        
-                        tbodyAndamento.innerHTML += `
-                        <tr class="hover:bg-amber-50/50 transition-colors border-b border-amber-50">
-                            <td class="px-4 py-3 font-medium text-slate-800">${row.nome||'-'}<br><span class="text-xs text-slate-500 font-normal tracking-tight">${prazoText}</span></td>
-                            <td class="px-4 py-3 text-sm">${tipoMov}</td>
-                            <td class="px-4 py-3 text-sm text-slate-600 max-w-xs truncate" title="${obsMov}">${obsMov}</td>
-                            <td class="px-4 py-3 flex gap-2">${btnEmail} ${btnCobrar} <button onclick="openModalMovimentacao('${row.id}')" class="text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded font-bold text-xs transition-colors"><i class="fas fa-edit"></i> Atualizar Ticket</button></td>
-                        </tr>`;
-                    });
-                } else { containerAndamento.classList.add('hidden'); }
+                            
+                            let botoesAcao = '';
+                            
+                            if (isPendente) {
+                                let dataLimiteMsg = '[Inserir Data]';
+                                if (row.movimentacao && row.movimentacao.prazo) {
+                                    let dtLimite = new Date(row.movimentacao.prazo + 'T12:00:00');
+                                    dtLimite.setDate(dtLimite.getDate() - 10);
+                                    dataLimiteMsg = dtLimite.toLocaleDateString('pt-BR');
+                                }
+                                let nomePrimeiro = row.nome ? row.nome.split(' ')[0] : 'Colaborador';
+                                let msgTextoBruto = `Olá, ${nomePrimeiro}, tudo bem? Aqui é da equipe de RH da My Business.\nPassando rapidinho para lembrar que o documento referente ao seu plano de saúde/odonto já foi enviado e está aguardando a sua assinatura! 📄\nPara garantirmos que tudo seja formalizado corretamente, peço que acesse o link que enviamos e conclua a assinatura. É bem rápido!\n⚠️ Lembrete importante: O prazo se encerra no dia ${dataLimiteMsg}.\nSe estiver com alguma dificuldade para abrir ou assinar o link, é só me avisar por aqui.`;
+                                let msgWhats = encodeURIComponent(msgTextoBruto);
+                                let numLimpoMov = row.telefone ? row.telefone.replace(/\D/g, '') : '';
+                                let linkWhatsMov = numLimpoMov ? `https://wa.me/55${numLimpoMov}?text=${msgWhats}` : `https://wa.me/?text=${msgWhats}`;
+                                
+                                let btnCobrar = `<button onclick="window.open('${linkWhatsMov}', '_blank')" class="bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-3 py-1 rounded text-xs font-bold transition-colors shadow-sm" title="Cobrar Assinatura do Colaborador (WhatsApp)"><i class="fab fa-whatsapp"></i></button>`;
+                                
+                                let btnEmail = `<button onclick="enviarEmailTicket('${row.id}')" class="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded text-xs font-bold transition-colors shadow-sm" title="Enviar pedido por E-mail"><i class="fas fa-envelope mr-1"></i> E-mail</button>`;
+                                
+                                botoesAcao = `${btnEmail} ${btnCobrar} <button onclick="openModalMovimentacao('${row.id}')" class="text-blue-600 bg-blue-50 hover:bg-blue-100 px-2 py-1 rounded font-bold text-xs transition-colors shadow-sm"><i class="fas fa-edit"></i> Atualizar Ticket</button>`;
+                            } else {
+                                botoesAcao = `<button onclick="openModalMovimentacao('${row.id}')" class="text-slate-600 bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded font-bold text-xs transition-colors shadow-sm border border-slate-200"><i class="fas fa-eye mr-1"></i> Ver Ticket</button>`;
+                            }
+                            
+                            let bgLinha = isConcluido ? 'hover:bg-emerald-50/50 border-b border-slate-100' : (isCancelado ? 'hover:bg-slate-50 border-b border-slate-100' : 'hover:bg-amber-50/50 border-b border-amber-50');
 
-                const filtered = data.filter(item => {
+                            tbodyAndamento.innerHTML += `
+                            <tr class="transition-colors ${bgLinha}">
+                                <td class="px-4 py-3 font-medium text-slate-800">${row.nome||'-'}<br><span class="text-xs text-slate-500 font-normal tracking-tight">${prazoText}</span></td>
+                                <td class="px-4 py-3 text-sm">${tipoMov}</td>
+                                <td class="px-4 py-3 text-sm text-slate-600 max-w-xs truncate" title="${obsMov}">${obsMov}</td>
+                                <td class="px-4 py-3 flex flex-wrap gap-2">${botoesAcao}</td>
+                            </tr>`;
+                        });
+                    }
+                } else { 
+                    containerAndamento.classList.add('hidden'); 
+                }
+
+                // Lógica de Renderização da Tabela Principal
+                const filteredBySearchAndSit = data.filter(item => {
                     const matchText = (item.nome||'').toLowerCase().includes(term) || (item.cpf||'').includes(term) || (item.plano||'').toLowerCase().includes(term) || (item.matricula||'').toLowerCase().includes(term);
                     let matchSit = false;
                     
@@ -543,15 +733,15 @@
                     else if (sit === 'desligados' && item.status === 'desligado') matchSit = true;
                     else if (sit === 'inclusao' && item.status === 'inclusao') matchSit = true;
                     
-                    let matchPlano = false;
-                    if (filterPlano === 'todos') matchPlano = true;
-                    else matchPlano = (item.plano === filterPlano);
-                    
-                    return matchText && matchSit && matchPlano;
+                    return matchText && matchSit;
                 });
 
-                filtered.forEach(row => {
-                    let calc = calcularCusteio(row.plano, row.qtdVidas, row.valorFatura);
+                filteredBySearchAndSit.forEach(row => {
+                    let hasSaude = row.plano && row.plano !== 'Sem_Plano';
+                    let hasOdonto = row.planoOdonto && row.planoOdonto !== 'Sem_Plano';
+                    let hasQualquerPlano = hasSaude || hasOdonto;
+
+                    let calc = calcularCusteio(row.plano, row.planoOdonto, row.qtdVidas, row.valorFatura);
                     let subEmpresa = calc.custoEmpresa;
                     let subColab = calc.descontoFolha;
                     let vidas = calc.vidas;
@@ -559,10 +749,9 @@
                     if (row.status !== 'desligado') {
                         if (row.status === 'inclusao') stats.inclusao++;
                         
-                        if (row.plano === 'Sem_Plano') {
-                            stats.semPlano++; // Colaboradores ativos mas sem cobertura
+                        if (!hasQualquerPlano) {
+                            stats.semPlano++; 
                         } else {
-                            // Colaboradores COM cobertura
                             stats.vidasTotais += vidas;
                             stats.titulares += 1;
                             stats.dependentes += (vidas - 1);
@@ -580,15 +769,28 @@
                 document.getElementById('count-dependentes').innerText = stats.dependentes; 
                 document.getElementById('count-sem-plano').innerText = stats.semPlano; 
                 document.getElementById('count-inclusao').innerText = stats.inclusao;
-                document.getElementById('count-custo-empresa').innerText = formatCurrency(stats.custoEmpresa); 
-                document.getElementById('count-desc-folha').innerText = formatCurrency(stats.descFolha);
 
-                if(filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-slate-400">Nenhum colaborador encontrado com estes filtros.</td></tr>'; return; }
+                const finalFiltered = filteredBySearchAndSit.filter(item => {
+                    let hasSaude = item.plano && item.plano !== 'Sem_Plano';
+                    let hasOdonto = item.planoOdonto && item.planoOdonto !== 'Sem_Plano';
 
-                filtered.forEach(row => {
+                    if (filterPlano === 'todos') return (hasSaude || hasOdonto);
+                    if (filterPlano === 'todos_geral') return true;
+                    if (filterPlano === 'Sem_Plano') return (!hasSaude && !hasOdonto);
+                    if (filterPlano === 'Amil_Odonto') return (item.planoOdonto === 'Amil_Odonto');
+                    
+                    return item.plano === filterPlano;
+                });
+
+                if(finalFiltered.length === 0) { tbody.innerHTML = '<tr><td colspan="8" class="p-4 text-center text-slate-400">Nenhum colaborador encontrado com estes filtros.</td></tr>'; return; }
+
+                finalFiltered.forEach(row => {
                     let isDes = row.status === 'desligado'; 
                     let isInc = row.status === 'inclusao';
-                    let isSemPlano = row.plano === 'Sem_Plano';
+                    
+                    let hasSaude = row.plano && row.plano !== 'Sem_Plano';
+                    let hasOdonto = row.planoOdonto && row.planoOdonto !== 'Sem_Plano';
+                    let isSemPlano = !hasSaude && !hasOdonto;
                     
                     let bg = isDes ? 'bg-gray-100 text-gray-400 line-through' : isInc ? 'bg-amber-50 border-l-4 border-amber-400' : isSemPlano ? 'bg-slate-50 border-l-4 border-slate-300' : 'hover:bg-slate-50 border-l-4 border-transparent hover:border-blue-300';
                     
@@ -598,30 +800,36 @@
                     let statusBadge = '';
                     if(isDes) statusBadge = `<span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">Desligado</span>`;
                     else if(isInc) statusBadge = `<span class="bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded font-bold"><i class="fas fa-hourglass-half"></i> Pendente</span>`;
-                    else statusBadge = `<span class="bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded font-bold"><i class="fas fa-check-circle"></i> Ativo na Folha</span>`;
+                    else statusBadge = `<span class="bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded font-bold"><i class="fas fa-check-circle"></i> Ativo</span>`;
 
                     if (row.movimentacao && row.movimentacao.status === 'Pendente') {
                         statusBadge += `<div class="mt-1"><span class="bg-amber-500 text-white text-[9px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shadow-sm"><i class="fas fa-exchange-alt"></i> Ticket</span></div>`;
                     }
 
+                    // Badge Saúde
                     let planoBadge = '';
-                    if (isSemPlano) planoBadge = `<span class="text-slate-500 bg-slate-200 px-2 py-1 rounded-full text-[10px] font-bold"><i class="fas fa-times-circle"></i> SEM PLANO</span>`;
-                    else if (row.plano === 'S80_Enfermaria') planoBadge = `<span class="text-indigo-700 bg-indigo-100 px-2 py-1 rounded-full text-[10px] font-bold">S80 ENF</span>`;
+                    if (row.plano === 'S80_Enfermaria') planoBadge = `<span class="text-indigo-700 bg-indigo-100 px-2 py-1 rounded-full text-[10px] font-bold">S80 ENF</span>`;
                     else if (row.plano === 'S380_QC') planoBadge = `<span class="text-teal-700 bg-teal-100 px-2 py-1 rounded-full text-[10px] font-bold">S380 QC</span>`;
                     else if (row.plano === 'S380_QP') planoBadge = `<span class="text-fuchsia-700 bg-fuchsia-100 px-2 py-1 rounded-full text-[10px] font-bold">S380 QP</span>`;
                     else if (row.plano === 'S450_QC') planoBadge = `<span class="text-orange-700 bg-orange-100 px-2 py-1 rounded-full text-[10px] font-bold">S450 QC</span>`;
                     else if (row.plano === 'S450_QP') planoBadge = `<span class="text-rose-700 bg-rose-100 px-2 py-1 rounded-full text-[10px] font-bold">S450 QP</span>`;
                     else if (row.plano === 'S750') planoBadge = `<span class="text-violet-700 bg-violet-100 px-2 py-1 rounded-full text-[10px] font-bold">S750</span>`;
-                    else if (row.plano === 'Amil_One_S1500') planoBadge = `<span class="text-slate-100 bg-slate-800 px-2 py-1 rounded-full text-[10px] font-bold"><i class="fas fa-crown text-amber-400 mr-1"></i>AMIL ONE</span>`;
+                    else if (row.plano === 'Amil_One_S1500') planoBadge = `<span class="text-slate-100 bg-slate-800 px-2 py-1 rounded-full text-[10px] font-bold"><i class="fas fa-crown text-amber-400 mr-1"></i> AMIL ONE</span>`;
                     else if (row.plano === 'Premium') planoBadge = `<span class="text-purple-700 bg-purple-100 px-2 py-1 rounded-full text-[10px] font-bold"><i class="fas fa-star"></i> PREMIUM</span>`;
-                    else planoBadge = `<span class="text-blue-700 bg-blue-100 px-2 py-1 rounded-full text-[10px] font-bold">BÁSICO</span>`;
+                    else if (hasSaude) planoBadge = `<span class="text-blue-700 bg-blue-100 px-2 py-1 rounded-full text-[10px] font-bold">SAÚDE: BÁSICO</span>`;
                     
-                    let calc = calcularCusteio(row.plano, row.qtdVidas, row.valorFatura);
+                    // Badge Odonto
+                    let odontoBadge = '';
+                    if (row.planoOdonto === 'Amil_Odonto') odontoBadge = `<span class="text-cyan-700 bg-cyan-100 px-2 py-1 rounded-full text-[10px] font-bold"><i class="fas fa-tooth"></i> AMIL DENTAL</span>`;
+                    else if (hasOdonto) odontoBadge = `<span class="text-cyan-700 bg-cyan-100 px-2 py-1 rounded-full text-[10px] font-bold"><i class="fas fa-tooth"></i> ODONTO</span>`;
+
+                    let comboBadges = '';
+                    if (isSemPlano) comboBadges = `<span class="text-slate-500 bg-slate-200 px-2 py-1 rounded-full text-[10px] font-bold"><i class="fas fa-times-circle"></i> NENHUM PLANO</span>`;
+                    else comboBadges = `<div class="flex flex-col gap-1 items-center justify-center">${planoBadge}${odontoBadge}</div>`;
+                    
+                    let calc = calcularCusteio(row.plano, row.planoOdonto, row.qtdVidas, row.valorFatura);
 
                     let txtVidas = isSemPlano ? '-' : `${row.qtdVidas || 1} <i class="fas fa-user-friends text-slate-400"></i>`;
-                    let txtFatura = isSemPlano ? '-' : formatCurrency(calc.fatura);
-                    let txtEmpresa = isSemPlano ? '-' : formatCurrency(calc.custoEmpresa);
-                    let txtFolha = isSemPlano ? '-' : formatCurrency(calc.descontoFolha);
 
                     tbody.innerHTML += `
                     <tr class="border-b transition ${bg}">
@@ -633,11 +841,8 @@
                                 ${zapLink}
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-center">${planoBadge}</td>
+                        <td class="px-6 py-4 text-center">${comboBadges}</td>
                         <td class="px-6 py-4 text-center font-bold text-slate-600">${txtVidas}</td>
-                        <td class="px-6 py-4 text-center font-bold">${txtFatura}</td>
-                        <td class="px-6 py-4 text-center font-bold text-red-600">${txtEmpresa}</td>
-                        <td class="px-6 py-4 text-center font-bold text-emerald-600">${txtFolha}</td>
                         <td class="px-6 py-4 text-center">${statusBadge}</td>
                         <td class="px-6 py-4 text-center flex justify-center items-center gap-1">
                             <button onclick="editRow('${row.id}')" class="text-blue-600 hover:bg-blue-100 p-2 rounded-full transition-colors bg-white shadow-sm border border-slate-200" title="Editar Ficha"><i class="fas fa-pen"></i></button>
@@ -660,6 +865,7 @@
                 document.getElementById('filePreviewLink').classList.add('hidden'); 
                 document.getElementById('inpStatus').value = 'ativo'; 
                 document.getElementById('inpPlano').value = 'Sem_Plano';
+                document.getElementById('inpPlanoOdonto').value = 'Sem_Plano';
                 document.getElementById('inpQtdVidas').value = 1;
                 document.getElementById('simEmpresa').innerText = 'R$ 0,00';
                 document.getElementById('simColaborador').innerText = 'R$ 0,00';
@@ -673,48 +879,223 @@
             };
             window.closeModal = () => document.getElementById('modalOverlay').classList.add('tela-oculta');
             
+            // ---- GESTÃO LOTE E AUDITORIA ----
             window.abrirAuditoria = () => {
+                document.getElementById('tipoAuditoria').value = 'ausentes';
+                window.mudarTipoAuditoria();
                 document.getElementById('auditoriaInput').value = '';
                 document.getElementById('resultadoAuditoria').classList.add('hidden');
                 document.getElementById('btnCadastrarFaltantes').classList.add('hidden');
                 window.faltantesParaCadastro = [];
+                window.itensParaAtualizarOdonto = [];
                 document.getElementById('modalAuditoria').classList.remove('tela-oculta');
+            };
+
+            window.mudarTipoAuditoria = () => {
+                let tipo = document.getElementById('tipoAuditoria').value;
+                let hint = document.getElementById('auditoriaHint');
+                let txt = document.getElementById('auditoriaInput');
+                document.getElementById('resultadoAuditoria').classList.add('hidden');
+                document.getElementById('btnCadastrarFaltantes').classList.add('hidden');
+
+                if (tipo === 'ausentes') {
+                    hint.innerText = 'Cole abaixo a lista dos colaboradores ativos (Nome e CPF) extraídos do seu sistema de Folha. O sistema irá verificar quem não tem nenhum plano e permitir adicioná-los à base com o status "Sem Plano".';
+                    txt.placeholder = 'Exemplo copiando e colando do Excel:\nJoão Silva    111.222.333-44\nMaria Santos  555.666.777-88';
+                    document.getElementById('lblAud1').innerText = 'Lidos na Folha';
+                    document.getElementById('lblAud2').innerText = 'Na Base (Com Saúde ou Odonto)';
+                    document.getElementById('lblAud3').innerText = 'Ausentes do Painel';
+                    document.getElementById('lblAud4').innerText = 'Colaboradores ausentes do painel:';
+                } else {
+                    hint.innerText = 'Cole abaixo a lista contendo o CPF do titular e o número da Carteirinha Odonto. O sistema buscará o CPF e preencherá a carteirinha automaticamente nas fichas existentes.';
+                    txt.placeholder = 'Exemplo copiando e colando do Excel:\n111.222.333-44    0777242123\n555.666.777-88    0777242999';
+                    document.getElementById('lblAud1').innerText = 'CPFs Identificados';
+                    document.getElementById('lblAud2').innerText = 'Encontrados na Base';
+                    document.getElementById('lblAud3').innerText = 'CPFs Não Encontrados';
+                    document.getElementById('lblAud4').innerText = 'Resumo da Atualização em Lote:';
+                }
             };
 
             window.fecharAuditoria = () => { document.getElementById('modalAuditoria').classList.add('tela-oculta'); };
 
+            window.processarAuditoria = () => {
+                const tipo = document.getElementById('tipoAuditoria').value;
+                const inputText = document.getElementById('auditoriaInput').value;
+                if (!inputText.trim()) return alert("Cole os dados na caixa de texto primeiro!");
+
+                const linhas = inputText.split('\n').filter(l => l.trim() !== '');
+
+                if (tipo === 'ausentes') {
+                    const titularesAtivos = globalData
+                        .filter(item => item.status !== 'desligado')
+                        .map(item => (item.cpf || '').replace(/\D/g, ''))
+                        .filter(cpf => cpf !== '');
+
+                    let totalAnalisados = 0;
+                    let comCobertura = 0;
+                    let semCobertura = [];
+                    window.faltantesParaCadastro = [];
+
+                    linhas.forEach(linha => {
+                        const match = linha.match(/\d{3}\.?\d{3}\.?\d{3}\-?\d{2}/);
+                        if (match) {
+                            totalAnalisados++;
+                            const cpfLimpo = match[0].replace(/\D/g, '');
+                            
+                            if (titularesAtivos.includes(cpfLimpo)) {
+                                comCobertura++;
+                            } else {
+                                let nomeColab = linha.replace(match[0], '').trim().replace(/\s+/g, ' ');
+                                semCobertura.push(linha.trim());
+                                window.faltantesParaCadastro.push({ nome: nomeColab || 'Colaborador Sem Nome', cpf: match[0] });
+                            }
+                        }
+                    });
+
+                    document.getElementById('audTotal').innerText = totalAnalisados;
+                    document.getElementById('audComPlano').innerText = comCobertura;
+                    document.getElementById('audSemPlano').innerText = semCobertura.length;
+
+                    const listaEl = document.getElementById('listaSemCobertura');
+                    const btnCadastrar = document.getElementById('btnCadastrarFaltantes');
+
+                    if (semCobertura.length > 0) {
+                        listaEl.innerHTML = semCobertura.map(l => `<div class="p-3 text-sm text-slate-700 bg-red-50/20 border-b border-red-100 last:border-0"><i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> ${l}</div>`).join('');
+                        btnCadastrar.innerHTML = '<i class="fas fa-user-plus mr-1"></i> Cadastrar na Base (Sem Planos)';
+                        btnCadastrar.classList.remove('hidden');
+                    } else {
+                        listaEl.innerHTML = `<div class="p-6 text-center text-emerald-600 font-bold"><i class="fas fa-check-circle text-4xl mb-3 block"></i> Base 100% Sincronizada!<br>Todos os colaboradores analisados já estão no painel.</div>`;
+                        btnCadastrar.classList.add('hidden');
+                    }
+                    document.getElementById('resultadoAuditoria').classList.remove('hidden');
+
+                } else if (tipo === 'odonto') {
+                    let totalLidos = 0;
+                    let encontrados = [];
+                    let naoEncontrados = [];
+                    window.itensParaAtualizarOdonto = [];
+
+                    linhas.forEach(linha => {
+                        const matchCpf = linha.match(/\d{3}\.?\d{3}\.?\d{3}\-?\d{2}/);
+                        if (matchCpf) {
+                            totalLidos++;
+                            const cpfStr = matchCpf[0];
+                            const cpfLimpo = cpfStr.replace(/\D/g, '');
+
+                            // Remove o CPF da linha para sobrar a carteirinha
+                            let resto = linha.replace(cpfStr, '').trim();
+                            let carteirinha = resto.split(/\s+/)[0]; // Pega a primeira palavra/número
+
+                            if (carteirinha) {
+                                let userMatch = globalData.find(item => item.cpf && item.cpf.replace(/\D/g, '') === cpfLimpo);
+
+                                if (userMatch) {
+                                    encontrados.push({ id: userMatch.id, nome: userMatch.nome, cpf: cpfStr, novaCart: carteirinha });
+                                } else {
+                                    naoEncontrados.push(`CPF ${cpfStr} não existe no painel`);
+                                }
+                            } else {
+                                naoEncontrados.push(`Carteirinha não identificada para o CPF: ${cpfStr}`);
+                            }
+                        }
+                    });
+
+                    document.getElementById('audTotal').innerText = totalLidos;
+                    document.getElementById('audComPlano').innerText = encontrados.length;
+                    document.getElementById('audSemPlano').innerText = naoEncontrados.length;
+
+                    const listaEl = document.getElementById('listaSemCobertura');
+                    const btnCadastrar = document.getElementById('btnCadastrarFaltantes');
+
+                    window.itensParaAtualizarOdonto = encontrados;
+
+                    let htmlLista = '';
+                    if (encontrados.length > 0) {
+                        htmlLista += '<div class="px-3 py-2 text-xs font-bold text-emerald-700 bg-emerald-100 uppercase rounded-t">Registos Prontos para Atualizar:</div>';
+                        htmlLista += encontrados.slice(0, 10).map(e => `<div class="p-2 px-3 text-xs text-slate-700 bg-emerald-50 border-b border-emerald-100 flex justify-between"><span class="font-bold">${e.nome}</span> <span class="font-mono text-emerald-600 bg-white px-2 rounded border border-emerald-200">${e.novaCart}</span></div>`).join('');
+                        if (encontrados.length > 10) htmlLista += `<div class="p-2 text-xs text-slate-500 text-center bg-slate-50">...e mais ${encontrados.length - 10} registos não exibidos.</div>`;
+                    }
+                    if (naoEncontrados.length > 0) {
+                        htmlLista += '<div class="px-3 py-2 text-xs font-bold text-red-700 bg-red-100 uppercase mt-4">Erros / Não Encontrados:</div>';
+                        htmlLista += naoEncontrados.map(l => `<div class="p-2 px-3 text-xs text-red-700 bg-red-50 border-b border-red-100"><i class="fas fa-times mr-1"></i> ${l}</div>`).join('');
+                    }
+
+                    listaEl.innerHTML = htmlLista || '<div class="p-4 text-center text-slate-500">Nenhum dado válido (CPF) extraído.</div>';
+
+                    if (encontrados.length > 0) {
+                        btnCadastrar.innerHTML = '<i class="fas fa-save mr-1"></i> Atualizar Carteirinhas Odonto';
+                        btnCadastrar.classList.remove('hidden');
+                    } else {
+                        btnCadastrar.classList.add('hidden');
+                    }
+                    document.getElementById('resultadoAuditoria').classList.remove('hidden');
+                }
+            };
+
+            window.executarAcaoAuditoria = () => {
+                const tipo = document.getElementById('tipoAuditoria').value;
+                if(tipo === 'ausentes') window.cadastrarFaltantes();
+                else if(tipo === 'odonto') window.atualizarCarteirinhasOdontoEmLote();
+            };
+
+            window.atualizarCarteirinhasOdontoEmLote = async () => {
+                if(!window.itensParaAtualizarOdonto || window.itensParaAtualizarOdonto.length === 0) return;
+                
+                const btn = document.getElementById('btnCadastrarFaltantes');
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> A atualizar...';
+                btn.disabled = true;
+
+                try {
+                    let atualizados = 0;
+                    for (let item of window.itensParaAtualizarOdonto) {
+                        if (item.novaCart) {
+                            await updateDoc(doc(db, "gestao_beneficios_saude", item.id), {
+                                carteirinhaOdonto: item.novaCart,
+                                updatedAt: new Date().toISOString()
+                            });
+                            atualizados++;
+                        }
+                    }
+                    alert(`${atualizados} carteirinhas Odonto foram atualizadas com sucesso!`);
+                    fecharAuditoria();
+                } catch(e) {
+                    alert("Erro ao atualizar carteirinhas: " + e.message);
+                }
+                
+                btn.disabled = false;
+            };
+
             function atualizarSimulacao() {
-                let plano = document.getElementById('inpPlano').value;
+                let planoSaude = document.getElementById('inpPlano').value;
+                let planoOdonto = document.getElementById('inpPlanoOdonto').value;
                 let vidas = document.getElementById('inpQtdVidas').value;
                 let fatura = document.getElementById('inpValorFatura').value;
 
-                let calc = calcularCusteio(plano, vidas, fatura);
+                let calc = calcularCusteio(planoSaude, planoOdonto, vidas, fatura);
 
-                if (plano === 'Sem_Plano') {
-                    document.getElementById('lblSimulacao').innerText = 'Sem Assistência (0 Custos)';
-                } else if (plano === 'S80_Enfermaria') {
-                    document.getElementById('lblSimulacao').innerText = 'S80 (50/50 - Custo R$ 416,16/vida)';
-                } else if (['S380_QC', 'S380_QP', 'S450_QC', 'S450_QP', 'S750'].includes(plano)) {
-                    document.getElementById('lblSimulacao').innerText = 'Regra (Empresa: Tit 30% | Dep 20%)';
-                } else if (plano === 'Amil_One_S1500') {
-                    document.getElementById('lblSimulacao').innerText = 'AMIL ONE S1500 (R$ 1.504,90/vida)';
-                } else {
-                    document.getElementById('lblSimulacao').innerText = 'Simulação Padrão (50/50)';
-                }
+                let textSaude = '';
+                if (planoSaude === 'Sem_Plano') textSaude = 'Saúde: Sem Assistência';
+                else if (planoSaude === 'S80_Enfermaria') textSaude = 'Saúde: S80 (Custo R$ 416,16/vida)';
+                else if (['S380_QC', 'S380_QP', 'S450_QC', 'S450_QP', 'S750'].includes(planoSaude)) textSaude = 'Saúde: Regra Tit 30% / Dep 20%';
+                else if (planoSaude === 'Amil_One_S1500') textSaude = 'Saúde: AMIL ONE (R$ 1.504,90/vida)';
+                else textSaude = 'Saúde: Padrão (50/50)';
+
+                let textOdonto = (planoOdonto === 'Amil_Odonto') ? ' + Odonto (Est. R$ 20/vida Folha)' : '';
+                
+                document.getElementById('lblSimulacao').innerText = textSaude + textOdonto;
 
                 document.getElementById('simEmpresa').innerText = formatCurrency(calc.custoEmpresa);
                 document.getElementById('simColaborador').innerText = formatCurrency(calc.descontoFolha);
                 
-                if(plano !== 'Basico' && plano !== 'Premium' && plano !== 'Sem_Plano') {
-                    document.getElementById('inpValorFatura').value = calc.fatura.toFixed(2);
-                } else if (plano === 'Sem_Plano') {
-                    document.getElementById('inpValorFatura').value = '0.00';
+                if(planoSaude !== 'Basico' && planoSaude !== 'Premium' && planoSaude !== 'Sem_Plano') {
+                    // Atualiza o valor apenas do Saúde no input para n quebrar cálculos base. Odonto entra por fora na simulação.
+                    // Para evitar loops infinitos com a simulação, manteremos a fatura total como placeholder visual
                 }
             }
 
             document.getElementById('inpValorFatura').addEventListener('input', atualizarSimulacao);
             document.getElementById('inpQtdVidas').addEventListener('input', atualizarSimulacao);
             document.getElementById('inpPlano').addEventListener('change', atualizarSimulacao);
+            document.getElementById('inpPlanoOdonto').addEventListener('change', atualizarSimulacao);
 
             window.editRow = (id) => {
                 const item = globalData.find(i => i.id === id);
@@ -731,6 +1112,7 @@
                 document.getElementById('inpCargo').value = item.cargo || '';
                 document.getElementById('inpCPF').value = item.cpf || '';
                 document.getElementById('inpCarteirinha').value = item.carteirinha || '';
+                document.getElementById('inpCarteirinhaOdonto').value = item.carteirinhaOdonto || '';
                 document.getElementById('inpTelefone').value = item.telefone || '';
                 
                 document.getElementById('inpQtdVidas').value = item.qtdVidas || 1;
@@ -739,6 +1121,7 @@
                 
                 document.getElementById('inpStatus').value = item.status || 'ativo'; 
                 document.getElementById('inpPlano').value = item.plano || 'Sem_Plano';
+                document.getElementById('inpPlanoOdonto').value = item.planoOdonto || 'Sem_Plano';
 
                 atualizarSimulacao();
 
@@ -789,12 +1172,14 @@
                         cargo: document.getElementById('inpCargo').value, 
                         cpf: document.getElementById('inpCPF').value,
                         carteirinha: document.getElementById('inpCarteirinha').value,
+                        carteirinhaOdonto: document.getElementById('inpCarteirinhaOdonto').value,
                         telefone: document.getElementById('inpTelefone').value, 
                         qtdVidas: document.getElementById('inpQtdVidas').value,
                         valorFatura: document.getElementById('inpValorFatura').value,
                         notas: document.getElementById('inpNotas').value, 
                         status: document.getElementById('inpStatus').value, 
                         plano: document.getElementById('inpPlano').value, 
+                        planoOdonto: document.getElementById('inpPlanoOdonto').value,
                         dependentes: window.currentDependentes,
                         fileUrl: fileUrl, 
                         updatedAt: new Date().toISOString()
@@ -809,18 +1194,70 @@
                 btn.disabled=false;
             };
 
-            window.deleteRow = async (id) => { 
-                if(confirm("Tem a certeza que deseja apagar este registo permanentemente da base?")) {
+            window.deleteRow = (id) => { 
+                window.customConfirm("Tem a certeza que deseja apagar este registo permanentemente da base?", async () => {
                     try {
                         await deleteDoc(doc(db, "gestao_beneficios_saude", id));
                     } catch (error) {
                         console.error("Erro ao apagar:", error);
                         alert("Erro ao apagar o registo.\nVerifique se as permissões do Firebase permitem exclusão.\nDetalhe do erro: " + error.message);
                     }
-                }
+                });
             };
 
-            // --- IMPORTAÇÃO DE FATURA (CSV) ---
+            // --- EXPORTAR BASE COMPLETA (BACKUP) ---
+            window.exportarBaseCompleta = () => {
+                let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Formato aceito pelo Excel com acentos (UTF-8 com BOM)
+                csvContent += "Matrícula;CPF;Nome;Dependência;Plano;Plano Odonto;Carteirinha;Carteirinha Odonto;Idade;Total Família;Data Inclusão;Data Exclusão;Situação;Telefone;Cargo;Notas\n";
+
+                globalData.forEach(item => {
+                    // Prepara dados do Titular
+                    let mat = item.matricula || '';
+                    let cpf = item.cpf || '';
+                    let nome = item.nome || '';
+                    let dep = item.dependencia || 'Titular';
+                    let plano = item.plano || 'Sem_Plano';
+                    let odonto = item.planoOdonto || 'Sem_Plano';
+                    let cart = item.carteirinha || '';
+                    let cartOdonto = item.carteirinhaOdonto || '';
+                    let idade = item.idade || '';
+                    let fatura = item.valorFatura || 0;
+                    let dInc = item.dataInclusao || '';
+                    let dExc = item.dataExclusao || '';
+                    let sit = item.status || 'ativo';
+                    let tel = item.telefone || '';
+                    let cargo = item.cargo || '';
+                    let notas = (item.notas || '').replace(/;/g, ',').replace(/\n/g, ' ');
+
+                    csvContent += `${mat};${cpf};${nome};${dep};${plano};${odonto};${cart};${cartOdonto};${idade};${fatura};${dInc};${dExc};${sit};${tel};${cargo};${notas}\n`;
+
+                    // Prepara dados dos Dependentes
+                    if (item.dependentes && item.dependentes.length > 0) {
+                        item.dependentes.forEach(d => {
+                            let dCpf = d.cpf || '';
+                            let dNome = d.nome || '';
+                            let dDep = d.dependencia || 'Dependente';
+                            let dCart = d.carteirinha || '';
+                            let dCartOdonto = d.carteirinhaOdonto || '';
+                            let dIdade = d.idade || '';
+                            let dIncDep = d.dataInclusao || '';
+                            let dExcDep = d.dataExclusao || '';
+
+                            csvContent += `${mat};${dCpf};${dNome};${dDep};;;${dCart};${dCartOdonto};${dIdade};0;${dIncDep};${dExcDep};${sit};;;;\n`;
+                        });
+                    }
+                });
+
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `backup_base_saude_${new Date().toISOString().split('T')[0]}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            // --- IMPORTAÇÃO DE FATURA (CSV) E BACKUPS ---
             document.getElementById('csvInput').addEventListener('change', (e) => {
                 const file = e.target.files[0]; 
                 if(!file) return;
@@ -834,124 +1271,161 @@
                         const data = results.data; 
                         document.getElementById('systemStatus').style.display = 'none'; 
                         
-                        if(!confirm(`Identificámos ${data.length} vidas na fatura.\nVamos agrupá-los por Matrícula e processar os valores.\n\nDeseja iniciar?`)) { 
-                            e.target.value = ''; 
-                            return; 
-                        }
-                        
-                        document.getElementById('systemStatus').style.display = 'flex'; 
-                        document.getElementById('statusText').innerHTML = `A IMPORTAR DADOS...<br><span style='font-size:12px'>A cruzar com o banco de dados.</span>`;
-                        
-                        try {
-                            let inseridos = 0; let atualizados = 0;
-                            const familias = {};
+                        window.customConfirm(`Identificámos ${data.length} vidas no ficheiro.\nVamos agrupá-los por Matrícula e processar os valores.\n\nDeseja iniciar?`, async () => { 
+                            document.getElementById('systemStatus').style.display = 'flex'; 
+                            document.getElementById('statusText').innerHTML = `A IMPORTAR DADOS...<br><span style='font-size:12px'>A cruzar com o banco de dados.</span>`;
                             
-                            for(let row of data) {
-                                let matricula = row['Matrícula'] || row['Matricula'] || row['MATRICULA'] || '';
-                                
-                                if (!matricula) {
-                                    matricula = row['CPF'] || row['CPF/CNPJ'] || row['cpf'] || ('IND_' + Math.random());
-                                }
-                                
-                                if(!familias[matricula]) familias[matricula] = [];
-                                familias[matricula].push(row);
-                            }
-
-                            for(let matricula in familias) {
-                                let membros = familias[matricula];
-                                
-                                let titular = membros.find(m => {
-                                    let tipo = (m['Tipo'] || '').toUpperCase();
-                                    let dep = (m['Dependência'] || m['Dependencia'] || m['Parentesco'] || '').toLowerCase();
-                                    return tipo === 'T' || dep.includes('titular') || dep === '0' || dep === ''; 
-                                });
-                                
-                                if (!titular) titular = membros[0];
-
-                                const cpfPlanilha = titular['CPF'] || titular['CPF/CNPJ'] || titular['cpf'] || '';
-                                const cpfLimpo = cpfPlanilha.replace(/\D/g, '');
-                                
-                                let valorString = titular['Total Família'] || titular['Total Familia'] || titular['Valor Total'] || titular['Valor'] || '0';
-                                valorString = valorString.toString().replace('R$', '').trim().replace(/\./g, '').replace(',', '.');
-                                const valorFatura = parseFloat(valorString) || 0;
-
-                                const parseDateCSV = (d) => {
-                                    if(!d) return '';
-                                    let val = d.toString().split(' ')[0];
-                                    if (val.includes('/')) {
-                                        let p = val.split('/');
-                                        if(p.length === 3) return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+                            try {
+                                let inseridos = 0; let atualizados = 0;
+                                const familias = {};
+                            
+                                for(let row of data) {
+                                    let matricula = row['Matrícula'] || row['Matricula'] || row['MATRICULA'] || '';
+                                    
+                                    if (!matricula) {
+                                        matricula = row['CPF'] || row['CPF/CNPJ'] || row['cpf'] || ('IND_' + Math.random());
                                     }
-                                    return val;
-                                };
-
-                                let dataInc = parseDateCSV(titular['Data Inclusão'] || titular['Data Inclusao'] || '');
-                                let dataExc = parseDateCSV(titular['Data Exclusão'] || titular['Data Exclusao'] || '');
-
-                                let statusRaw = (titular['Situação'] || titular['Status'] || '').toLowerCase();
-                                let status = (statusRaw.includes('desligado') || statusRaw.includes('exclu') || dataExc !== '') ? 'desligado' : 'ativo';
-
-                                let planoAjustado = 'Basico';
-                                const planoRaw = (titular['Plano'] || titular['plano'] || titular['Produto'] || '').toUpperCase();
-                                if(planoRaw.includes('S80')) planoAjustado = 'S80_Enfermaria';
-                                else if(planoRaw.includes('S380 QC')) planoAjustado = 'S380_QC';
-                                else if(planoRaw.includes('S380 QP')) planoAjustado = 'S380_QP';
-                                else if(planoRaw.includes('S450 QC')) planoAjustado = 'S450_QC';
-                                else if(planoRaw.includes('S450 QP')) planoAjustado = 'S450_QP';
-                                else if(planoRaw.includes('S750')) planoAjustado = 'S750';
-                                else if(planoRaw.includes('AMIL') || planoRaw.includes('S1500')) planoAjustado = 'Amil_One_S1500';
-                                else if(planoRaw.includes('PREMIUM')) planoAjustado = 'Premium';
-
-                                let arrDependentes = membros.filter(m => m !== titular).map(d => ({
-                                    nome: d['Beneficiário'] || d['Beneficiario'] || d['Nome'] || 'Sem Nome',
-                                    carteirinha: d['Código'] || d['Codigo'] || d['Carteirinha'] || '',
-                                    dependencia: d['Dependência'] || d['Dependencia'] || d['Parentesco'] || 'Dependente',
-                                    idade: d['Idade'] || '',
-                                    dataInclusao: parseDateCSV(d['Data Inclusão'] || d['Data Inclusao'] || ''),
-                                    dataExclusao: parseDateCSV(d['Data Exclusão'] || d['Data Exclusao'] || '')
-                                }));
-
-                                const qtdVidas = membros.length; 
-
-                                const registroExistente = globalData.find(item => {
-                                    let matchCPF = (cpfLimpo && item.cpf && item.cpf.replace(/\D/g, '') === cpfLimpo);
-                                    let matchMatricula = (matricula && !matricula.startsWith('IND_') && item.matricula === matricula);
-                                    return matchCPF || matchMatricula;
-                                });
-                                
-                                const dataToSave = {
-                                    nome: titular['Beneficiário'] || titular['Beneficiario'] || titular['Nome'] || 'Sem Nome',
-                                    matricula: matricula.startsWith('IND_') ? '' : matricula,
-                                    carteirinha: titular['Código'] || titular['Codigo'] || titular['Carteirinha'] || '',
-                                    idade: titular['Idade'] || '',
-                                    dependencia: titular['Dependência'] || titular['Dependencia'] || 'Titular',
-                                    dataInclusao: dataInc,
-                                    dataExclusao: dataExc,
-                                    plano: planoAjustado,
-                                    valorFatura: valorFatura,
-                                    qtdVidas: qtdVidas,
-                                    status: status,
-                                    dependentes: arrDependentes, 
-                                    updatedAt: new Date().toISOString()
-                                };
-
-                                if (cpfPlanilha) dataToSave.cpf = cpfPlanilha;
-                                
-                                if (registroExistente) {
-                                    await updateDoc(doc(db, "gestao_beneficios_saude", registroExistente.id), dataToSave); 
-                                    atualizados++;
-                                } else {
-                                    await addDoc(colRef, dataToSave); 
-                                    inseridos++;
+                                    
+                                    if(!familias[matricula]) familias[matricula] = [];
+                                    familias[matricula].push(row);
                                 }
+
+                                for(let matricula in familias) {
+                                    let membros = familias[matricula];
+                                    
+                                    let titular = membros.find(m => {
+                                        let tipo = (m['Tipo'] || '').toUpperCase();
+                                        let dep = (m['Dependência'] || m['Dependencia'] || m['Parentesco'] || '').toLowerCase();
+                                        return tipo === 'T' || dep.includes('titular') || dep === '0' || dep === ''; 
+                                    });
+                                    
+                                    if (!titular) titular = membros[0];
+
+                                    const cpfPlanilha = titular['CPF'] || titular['CPF/CNPJ'] || titular['cpf'] || '';
+                                    const cpfLimpo = cpfPlanilha.replace(/\D/g, '');
+                                    
+                                    let valorString = titular['Total Família'] || titular['Total Familia'] || titular['Valor Total'] || titular['Valor'] || '0';
+                                    valorString = valorString.toString().replace('R$', '').trim().replace(/\./g, '').replace(',', '.');
+                                    const valorFatura = parseFloat(valorString) || 0;
+
+                                    const parseDateCSV = (d) => {
+                                        if(!d) return '';
+                                        let val = d.toString().split(' ')[0];
+                                        if (val.includes('/')) {
+                                            let p = val.split('/');
+                                            if(p.length === 3) return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+                                        }
+                                        return val;
+                                    };
+
+                                    let dataInc = parseDateCSV(titular['Data Inclusão'] || titular['Data Inclusao'] || '');
+                                    let dataExc = parseDateCSV(titular['Data Exclusão'] || titular['Data Exclusao'] || '');
+
+                                    let statusRaw = (titular['Situação'] || titular['Status'] || '').toLowerCase();
+                                    let status = (statusRaw.includes('desligado') || statusRaw.includes('exclu') || dataExc !== '') ? 'desligado' : (titular['Situação'] === 'inclusao' ? 'inclusao' : 'ativo');
+
+                                    let planoAjustado = 'Sem_Plano';
+                                    let planoOdontoAjustado = 'Sem_Plano';
+                                    
+                                    const validPlanos = ['Sem_Plano', 'S80_Enfermaria', 'S380_QC', 'S380_QP', 'S450_QC', 'S450_QP', 'S750', 'Amil_One_S1500', 'Basico', 'Premium'];
+                                    const validOdonto = ['Sem_Plano', 'Amil_Odonto', 'Outro_Odonto'];
+
+                                    const planoRaw = (titular['Plano'] || titular['plano'] || titular['Produto'] || '').toUpperCase();
+                                    
+                                    // Se o dado vier do nosso próprio Backup CSV, respeita o valor exato
+                                    if (titular['Plano'] && validPlanos.includes(titular['Plano'])) {
+                                        planoAjustado = titular['Plano'];
+                                    } else {
+                                        if(planoRaw.includes('ODONTO') || planoRaw.includes('DENTAL')) planoOdontoAjustado = 'Amil_Odonto';
+                                        else {
+                                            if(planoRaw.includes('S80')) planoAjustado = 'S80_Enfermaria';
+                                            else if(planoRaw.includes('S380 QC')) planoAjustado = 'S380_QC';
+                                            else if(planoRaw.includes('S380 QP')) planoAjustado = 'S380_QP';
+                                            else if(planoRaw.includes('S450 QC')) planoAjustado = 'S450_QC';
+                                            else if(planoRaw.includes('S450 QP')) planoAjustado = 'S450_QP';
+                                            else if(planoRaw.includes('S750')) planoAjustado = 'S750';
+                                            else if(planoRaw.includes('AMIL') || planoRaw.includes('S1500')) planoAjustado = 'Amil_One_S1500';
+                                            else if(planoRaw.includes('PREMIUM')) planoAjustado = 'Premium';
+                                            else planoAjustado = 'Basico';
+                                        }
+                                    }
+
+                                    if (titular['Plano Odonto'] && validOdonto.includes(titular['Plano Odonto'])) {
+                                        planoOdontoAjustado = titular['Plano Odonto'];
+                                    } else if (!planoOdontoAjustado || planoOdontoAjustado === 'Sem_Plano') {
+                                        // fallback caso já tivesse setado em planoAjustado
+                                    }
+
+                                    let arrDependentes = membros.filter(m => m !== titular).map(d => ({
+                                        nome: d['Beneficiário'] || d['Beneficiario'] || d['Nome'] || 'Sem Nome',
+                                        cpf: d['CPF'] || '',
+                                        carteirinha: d['Código'] || d['Codigo'] || d['Carteirinha'] || '',
+                                        carteirinhaOdonto: d['Carteirinha Odonto'] || '',
+                                        dependencia: d['Dependência'] || d['Dependencia'] || d['Parentesco'] || 'Dependente',
+                                        idade: d['Idade'] || '',
+                                        dataInclusao: parseDateCSV(d['Data Inclusão'] || d['Data Inclusao'] || ''),
+                                        dataExclusao: parseDateCSV(d['Data Exclusão'] || d['Data Exclusao'] || '')
+                                    }));
+
+                                    const qtdVidas = membros.length; 
+
+                                    const registroExistente = globalData.find(item => {
+                                        let matchCPF = (cpfLimpo && item.cpf && item.cpf.replace(/\D/g, '') === cpfLimpo);
+                                        let matchMatricula = (matricula && !matricula.startsWith('IND_') && item.matricula === matricula);
+                                        return matchCPF || matchMatricula;
+                                    });
+                                    
+                                    const dataToSave = {
+                                        nome: titular['Beneficiário'] || titular['Beneficiario'] || titular['Nome'] || 'Sem Nome',
+                                        matricula: matricula.startsWith('IND_') ? '' : matricula,
+                                        carteirinha: titular['Código'] || titular['Codigo'] || titular['Carteirinha'] || '',
+                                        carteirinhaOdonto: titular['Carteirinha Odonto'] || '',
+                                        telefone: titular['Telefone'] || '',
+                                        cargo: titular['Cargo'] || '',
+                                        notas: titular['Notas'] || '',
+                                        idade: titular['Idade'] || '',
+                                        dependencia: titular['Dependência'] || titular['Dependencia'] || 'Titular',
+                                        dataInclusao: dataInc,
+                                        dataExclusao: dataExc,
+                                        plano: planoAjustado,
+                                        planoOdonto: planoOdontoAjustado,
+                                        valorFatura: valorFatura,
+                                        qtdVidas: qtdVidas,
+                                        status: status,
+                                        dependentes: arrDependentes, 
+                                        updatedAt: new Date().toISOString()
+                                    };
+
+                                    if (cpfPlanilha) dataToSave.cpf = cpfPlanilha;
+                                    
+                                    if (registroExistente) {
+                                        // Se houver notas ou telefone vazios no CSV, mantém o que já estava na base (evita perda ao importar Faturas simples)
+                                        if (!dataToSave.telefone) dataToSave.telefone = registroExistente.telefone || '';
+                                        if (!dataToSave.cargo) dataToSave.cargo = registroExistente.cargo || '';
+                                        if (!dataToSave.notas) dataToSave.notas = registroExistente.notas || '';
+                                        if (!dataToSave.carteirinhaOdonto) dataToSave.carteirinhaOdonto = registroExistente.carteirinhaOdonto || '';
+
+                                        // Se for importação de fatura que não tinha a coluna Plano explícita, preserva o do banco caso existente
+                                        if (planoAjustado === 'Sem_Plano' && !titular['Plano']) dataToSave.plano = registroExistente.plano;
+                                        if (planoOdontoAjustado === 'Sem_Plano' && !titular['Plano Odonto']) dataToSave.planoOdonto = registroExistente.planoOdonto;
+
+                                        await updateDoc(doc(db, "gestao_beneficios_saude", registroExistente.id), dataToSave); 
+                                        atualizados++;
+                                    } else {
+                                        await addDoc(colRef, dataToSave); 
+                                        inseridos++;
+                                    }
+                                }
+                                alert(`Importação Concluída com Sucesso!\n\n${inseridos} famílias novas cadastradas.\n${atualizados} famílias atualizadas.`);
+                            } catch(error) { 
+                                alert("Erro na importação: " + error.message); 
                             }
-                            alert(`Importação Concluída com Sucesso!\n\n${inseridos} famílias novas cadastradas.\n${atualizados} famílias atualizadas.`);
-                        } catch(error) { 
-                            alert("Erro na importação: " + error.message); 
-                        }
-                        
-                        document.getElementById('systemStatus').style.display = 'none';
-                        e.target.value = ''; 
+                            
+                            document.getElementById('systemStatus').style.display = 'none';
+                            e.target.value = ''; 
+                        }, () => {
+                            e.target.value = ''; 
+                        });
                     }
                 });
             });
@@ -959,145 +1433,386 @@
             document.getElementById('searchInput').addEventListener('input', () => renderTable(globalData));
             document.getElementById('filterSituacao').addEventListener('change', () => renderTable(globalData));
             document.getElementById('filterPlano').addEventListener('change', () => renderTable(globalData));
+            if(document.getElementById('filtroStatusMov')) {
+                document.getElementById('filtroStatusMov').addEventListener('change', () => renderTable(globalData));
+            }
 
-            // INTEGRAÇÃO DE CADASTRO PELA AUDITORIA (SEM PLANO)
-            window.processarAuditoria = () => {
-                const inputText = document.getElementById('auditoriaInput').value;
-                if (!inputText.trim()) return alert("Cole a lista do seu sistema de folha primeiro!");
-
-                const linhas = inputText.split('\n').filter(l => l.trim() !== '');
+            window.pesquisarParaDesligamento = () => {
+                const term = document.getElementById('inputBuscaDesligamento').value.toLowerCase().trim();
+                const container = document.getElementById('resultadoBuscaDesligamento');
                 
-                // Pega todos os CPFs da base (independente se tem plano ou não, desde que não sejam desligados)
-                const titularesAtivos = globalData
-                    .filter(item => item.status !== 'desligado')
-                    .map(item => (item.cpf || '').replace(/\D/g, ''))
-                    .filter(cpf => cpf !== '');
+                if (term.length < 3) {
+                    container.innerHTML = '<div class="p-4 text-center text-slate-400 text-sm">Digite pelo menos 3 caracteres acima para pesquisar...</div>';
+                    return;
+                }
 
-                let totalAnalisados = 0;
-                let comCobertura = 0;
-                let semCobertura = [];
-                window.faltantesParaCadastro = [];
-
-                linhas.forEach(linha => {
-                    const match = linha.match(/\d{3}\.?\d{3}\.?\d{3}\-?\d{2}/);
-                    if (match) {
-                        totalAnalisados++;
-                        const cpfLimpo = match[0].replace(/\D/g, '');
-                        
-                        if (titularesAtivos.includes(cpfLimpo)) {
-                            comCobertura++;
-                        } else {
-                            // Extrai o nome limpando o CPF e múltiplos espaços
-                            let nomeColab = linha.replace(match[0], '').trim().replace(/\s+/g, ' ');
-                            semCobertura.push(linha.trim());
-                            window.faltantesParaCadastro.push({ nome: nomeColab || 'Colaborador Sem Nome', cpf: match[0] });
-                        }
-                    }
+                // Busca quem contem o termo
+                const resultados = globalData.filter(item => {
+                    const cpfLimpoBusca = term.replace(/\D/g, '');
+                    const matchCPF = cpfLimpoBusca.length > 0 && (item.cpf || '').replace(/\D/g, '').includes(cpfLimpoBusca);
+                    const matchNome = (item.nome || '').toLowerCase().includes(term);
+                    const matchMat = (item.matricula || '').toLowerCase().includes(term);
+                    return matchNome || matchCPF || matchMat;
                 });
 
-                document.getElementById('audTotal').innerText = totalAnalisados;
-                document.getElementById('audComPlano').innerText = comCobertura;
-                document.getElementById('audSemPlano').innerText = semCobertura.length;
-
-                const listaEl = document.getElementById('listaSemCobertura');
-                const btnCadastrar = document.getElementById('btnCadastrarFaltantes');
-
-                if (semCobertura.length > 0) {
-                    listaEl.innerHTML = semCobertura.map(l => `<div class="p-3 text-sm text-slate-700 bg-red-50/20"><i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> ${l}</div>`).join('');
-                    btnCadastrar.classList.remove('hidden');
-                } else {
-                    listaEl.innerHTML = `<div class="p-6 text-center text-emerald-600 font-bold"><i class="fas fa-check-circle text-4xl mb-3 block"></i> Base 100% Sincronizada!<br>Todos os colaboradores analisados já estão no painel.</div>`;
-                    btnCadastrar.classList.add('hidden');
+                if (resultados.length === 0) {
+                    container.innerHTML = '<div class="p-4 text-center text-red-500 font-bold text-sm"><i class="fas fa-exclamation-circle"></i> Nenhum colaborador encontrado com esses dados.</div>';
+                    return;
                 }
 
-                document.getElementById('resultadoAuditoria').classList.remove('hidden');
+                container.innerHTML = resultados.map(row => {
+                    let statusInfo = '';
+                    if (row.status === 'desligado') statusInfo = '<span class="text-[10px] ml-2 bg-slate-200 text-slate-600 px-2 py-0.5 rounded font-bold uppercase">Já consta Desligado</span>';
+                    else if (row.status === 'inclusao') statusInfo = '<span class="text-[10px] ml-2 bg-amber-200 text-amber-800 px-2 py-0.5 rounded font-bold uppercase">Aguardando Inclusão</span>';
+                    else statusInfo = '<span class="text-[10px] ml-2 bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold uppercase">Ativo na Folha</span>';
+
+                    let planoInfo = '';
+                    let acaoBtn = '';
+                    let detalhesExtras = '';
+                    
+                    let hasSaude = row.plano && row.plano !== 'Sem_Plano';
+                    let hasOdonto = row.planoOdonto && row.planoOdonto !== 'Sem_Plano';
+                    
+                    if (!hasSaude && !hasOdonto) {
+                        planoInfo = '<div class="text-slate-500 font-bold mt-1 text-sm"><i class="fas fa-times-circle"></i> SEM NENHUM BENEFÍCIO ATIVO</div>';
+                        acaoBtn = `<button onclick="fecharConsultaDesligamento(); inativarSemPlano('${row.id}')" class="bg-slate-700 hover:bg-slate-800 text-white px-3 py-1.5 rounded text-xs font-bold transition-colors shadow-sm"><i class="fas fa-user-slash mr-1"></i> Apenas Inativar</button>`;
+                    } else {
+                        let nomeSaudeVis = hasSaude ? row.plano.replace(/_/g, ' ') : 'Nenhum';
+                        let nomeOdontoVis = hasOdonto ? row.planoOdonto.replace(/_/g, ' ') : 'Nenhum';
+                        
+                        planoInfo = `
+                            <div class="text-rose-600 font-bold mt-1 text-sm"><i class="fas fa-heartbeat"></i> Saúde: ${nomeSaudeVis}</div>
+                            <div class="text-cyan-700 font-bold mt-0.5 text-sm"><i class="fas fa-tooth"></i> Odonto: ${nomeOdontoVis}</div>
+                            <div class="text-[10px] text-slate-500 font-bold mt-0.5 uppercase tracking-wide">Composição: ${row.qtdVidas} Vidas</div>
+                        `;
+                        acaoBtn = `<button onclick="fecharConsultaDesligamento(); prepararExclusaoPlano('${row.id}')" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-1.5 rounded text-xs font-bold transition-colors shadow-sm"><i class="fas fa-exchange-alt mr-1"></i> Providenciar Exclusão</button>`;
+                        
+                        // Formatação dos Dados Extras para Formulário
+                        let cpfNumeros = row.cpf ? row.cpf.replace(/\D/g, '') : 'Não informado';
+                        let numCarteirinhaSaude = row.carteirinha || 'N/A';
+                        let numCarteirinhaOdonto = row.carteirinhaOdonto || 'N/A';
+                        let tempoAtivo = 'Data de inclusão não registrada';
+                        
+                        if (row.dataInclusao) {
+                            let inicio = new Date(row.dataInclusao + 'T00:00:00');
+                            let fim = row.dataExclusao ? new Date(row.dataExclusao + 'T00:00:00') : new Date();
+                            
+                            let diffAnos = fim.getFullYear() - inicio.getFullYear();
+                            let diffMeses = fim.getMonth() - inicio.getMonth();
+                            let diffDias = fim.getDate() - inicio.getDate();
+
+                            if (diffDias < 0) {
+                                diffMeses--;
+                                let mesAnterior = new Date(fim.getFullYear(), fim.getMonth(), 0).getDate();
+                                diffDias += mesAnterior;
+                            }
+                            if (diffMeses < 0) {
+                                diffAnos--;
+                                diffMeses += 12;
+                            }
+                            
+                            let partesTempo = [];
+                            if (diffAnos > 0) partesTempo.push(diffAnos + (diffAnos === 1 ? ' ano' : ' anos'));
+                            if (diffMeses > 0) partesTempo.push(diffMeses + (diffMeses === 1 ? ' mês' : ' meses'));
+                            if (diffDias > 0 || partesTempo.length === 0) partesTempo.push(diffDias + (diffDias === 1 ? ' dia' : ' dias'));
+                            
+                            tempoAtivo = partesTempo.join(', ');
+                        }
+
+                        detalhesExtras = `
+                        <div class="mt-4 bg-rose-50/50 p-3 rounded-lg border border-rose-100 text-xs text-slate-700">
+                            <div class="text-[10px] font-bold text-rose-800 uppercase mb-2"><i class="fas fa-file-signature mr-1"></i> Dados para Formulário de Desligamento</div>
+                            <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-3">
+                                <div><span class="block text-[10px] text-slate-400 font-bold uppercase mb-0.5">Ctr. Amil Saúde</span><span class="font-mono bg-white px-2 py-1 rounded border border-slate-200 block truncate cursor-copy" title="Copiar" onclick="navigator.clipboard.writeText('1584459000'); alert('Contrato Saúde Copiado!');">1584459000</span></div>
+                                <div><span class="block text-[10px] text-slate-400 font-bold uppercase mb-0.5">Ctr. Amil Odonto</span><span class="font-mono bg-white px-2 py-1 rounded border border-slate-200 block truncate cursor-copy" title="Copiar" onclick="navigator.clipboard.writeText('777242'); alert('Contrato Odonto Copiado!');">0777242</span></div>
+                                <div><span class="block text-[10px] text-slate-400 font-bold uppercase mb-0.5">CPF (Números)</span><span class="font-mono bg-white px-2 py-1 rounded border border-slate-200 block truncate cursor-copy" title="Copiar" onclick="navigator.clipboard.writeText('${cpfNumeros}'); alert('CPF Copiado!');">${cpfNumeros}</span></div>
+                                <div><span class="block text-[10px] text-slate-400 font-bold uppercase mb-0.5">Cart. Saúde / Odonto</span><span class="font-mono bg-white px-2 py-1 rounded border border-slate-200 block truncate" title="Saúde: ${numCarteirinhaSaude} | Odonto: ${numCarteirinhaOdonto}">${numCarteirinhaSaude} / ${numCarteirinhaOdonto}</span></div>
+                                <div><span class="block text-[10px] text-slate-400 font-bold uppercase mb-0.5">Tempo Permanência</span><span class="font-medium text-indigo-700 bg-white px-2 py-1 rounded border border-slate-200 block truncate" title="${tempoAtivo}">${tempoAtivo}</span></div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-white p-2 rounded border border-rose-100">
+                                <div class="sm:col-span-1">
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase mb-0.5">Data do Desligamento</span>
+                                    <input type="date" id="dataDesligamento_${row.id}" onchange="calcularPrazoExclusao('${row.id}')" class="w-full bg-slate-50 p-2 rounded border border-slate-200 text-xs outline-none font-medium text-slate-700">
+                                </div>
+                                <div class="sm:col-span-1">
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase mb-0.5">Prazo P/ Exclusão (+30 dias)</span>
+                                    <input type="date" id="prazoExclusao_${row.id}" class="w-full bg-rose-100 p-2 rounded border border-rose-200 text-xs outline-none font-bold text-rose-800 cursor-not-allowed" readonly title="Calculado automaticamente (Desligamento + 30 dias)">
+                                </div>
+                                <div class="sm:col-span-1">
+                                    <span class="block text-[10px] text-slate-400 font-bold uppercase mb-0.5">Motivo do Desligamento</span>
+                                    <select id="motivo_${row.id}" class="w-full bg-slate-50 p-2 rounded border border-slate-200 text-xs outline-none font-medium text-slate-700">
+                                        <option value="Demissão/exoneração sem justa causa">Demissão/exoneração sem justa causa</option>
+                                        <option value="Pedido de demissão (empregado) ou exoneração (funcionário)">Pedido de demissão (empregado) ou exoneração (funcionário)</option>
+                                        <option value="Desistência do plano">Desistência do plano</option>
+                                        <option value="Óbito do titular">Óbito do titular</option>
+                                        <option value="Demissão por justa causa">Demissão por justa causa</option>
+                                        <option value="Término de contrato de trabalho/estágio">Término de contrato de trabalho/estágio</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>`;
+                    }
+
+                    // NOVO LAYOUT DO ITEM
+                    return `
+                    <div class="p-4 hover:bg-white transition-colors border-b border-slate-100 last:border-0 flex flex-col">
+                        <!-- Linha Superior: Nome/Info e Botão Lado a Lado -->
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-start gap-4">
+                            <div class="w-full sm:flex-1">
+                                <div class="font-bold text-slate-800 flex items-center flex-wrap">${row.nome || 'Sem Nome'} ${statusInfo}</div>
+                                <div class="text-xs text-slate-500 font-mono mt-0.5">Matrícula: ${row.matricula || '-'}</div>
+                                ${planoInfo}
+                            </div>
+                            <div class="flex-shrink-0 mt-2 sm:mt-0 w-full sm:w-auto flex justify-end">
+                                ${row.status === 'desligado' ? '<span class="text-slate-400 text-xs italic font-medium"><i class="fas fa-check"></i> Desligamento já efetuado</span>' : acaoBtn}
+                            </div>
+                        </div>
+                        
+                        <!-- Linha Inferior: Formulário Ocupando 100% da Largura -->
+                        <div class="w-full">
+                            ${detalhesExtras}
+                        </div>
+                    </div>`;
+                }).join('');
             };
 
-            window.cadastrarFaltantes = async () => {
-                if(window.faltantesParaCadastro.length === 0) return;
-                
-                const btn = document.getElementById('btnCadastrarFaltantes');
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> A processar...';
-                btn.disabled = true;
-
-                try {
-                    let cadastrados = 0;
-                    for (let f of window.faltantesParaCadastro) {
-                        await addDoc(colRef, {
-                            nome: f.nome,
-                            cpf: f.cpf,
-                            plano: 'Sem_Plano', // Define diretamente como Sem Plano
-                            status: 'ativo',
-                            qtdVidas: 1, // Ele mesmo
-                            valorFatura: 0,
-                            dependencia: 'Titular',
-                            dependentes: [],
+            window.inativarSemPlano = (id) => {
+                window.customConfirm("Este colaborador NÃO POSSUI NENHUM benefício ativo.\n\nDeseja apenas marcá-lo como DESLIGADO no painel para que seja retirado das listagens ativas?", async () => {
+                    try {
+                        await updateDoc(doc(db, "gestao_beneficios_saude", id), {
+                            status: 'desligado',
+                            dataExclusao: new Date().toISOString().split('T')[0],
                             updatedAt: new Date().toISOString()
                         });
-                        cadastrados++;
-                    }
-                    alert(`${cadastrados} colaboradores foram adicionados à base com o status "Sem Plano"!`);
-                    fecharAuditoria();
-                } catch(e) {
-                    alert("Erro ao cadastrar: " + e.message);
-                }
-                
-                btn.innerHTML = '<i class="fas fa-user-plus mr-1"></i> Cadastrar na Base (Sem Plano)';
-                btn.disabled = false;
+                        window.alert("O colaborador foi inativado com sucesso!");
+                    } catch(e) { window.alert("Erro ao inativar: " + e.message); }
+                });
             };
 
-            // Gestão de Movimentações
+            window.calcularPrazoExclusao = (id) => {
+                const dataInp = document.getElementById('dataDesligamento_' + id).value;
+                if (dataInp) {
+                    // Adiciona 12 horas para evitar problemas de fuso horário que empurram 1 dia para trás
+                    const dataObj = new Date(dataInp + 'T12:00:00');
+                    dataObj.setDate(dataObj.getDate() + 30);
+                    const prazoISO = dataObj.toISOString().split('T')[0];
+                    document.getElementById('prazoExclusao_' + id).value = prazoISO;
+                } else {
+                    document.getElementById('prazoExclusao_' + id).value = '';
+                }
+            };
+
+            window.prepararExclusaoPlano = (id) => {
+                let motivoSelect = document.getElementById('motivo_' + id);
+                let motivoText = motivoSelect ? motivoSelect.value : '';
+
+                let dataDesligamentoInp = document.getElementById('dataDesligamento_' + id);
+                let dataDesligamentoText = dataDesligamentoInp && dataDesligamentoInp.value ? formatDateBR(dataDesligamentoInp.value) : 'Não informada';
+                
+                let prazoInp = document.getElementById('prazoExclusao_' + id);
+                let prazoValue = prazoInp ? prazoInp.value : '';
+                let prazoText = prazoValue ? formatDateBR(prazoValue) : 'Não informado';
+
+                window.customConfirm("Este colaborador POSSUI benefício ativo.\n\nVamos marcá-lo como DESLIGADO no painel e abrir a tela de Tickets para você registrar o pedido de exclusão na corretora.\n\nContinuar?", async () => {
+                    try {
+                        await updateDoc(doc(db, "gestao_beneficios_saude", id), {
+                            status: 'desligado',
+                            dataExclusao: (dataDesligamentoInp && dataDesligamentoInp.value) ? dataDesligamentoInp.value : new Date().toISOString().split('T')[0],
+                            updatedAt: new Date().toISOString()
+                        });
+                        // Aguarda um pequeno momento e abre a janela de Ticket (que agora irá identificar o status 'desligado')
+                        setTimeout(() => {
+                            window.openModalMovimentacao(id);
+                            // Preenche automaticamente as observações do ticket com os dados do formulário
+                            setTimeout(() => {
+                                let notasEl = document.getElementById('movNotas');
+                                let prazoTicketEl = document.getElementById('movPrazo');
+                                
+                                if (notasEl) {
+                                    notasEl.value = `Ctr. Saúde: 1584459000 | Ctr. Odonto: 0777242\nMotivo: ${motivoText}\nData Desligamento: ${dataDesligamentoText}\nPrazo p/ Exclusão: ${prazoText}\n\n` + notasEl.value;
+                                }
+                                
+                                if (prazoTicketEl && prazoValue) {
+                                    prazoTicketEl.value = prazoValue;
+                                }
+                            }, 150);
+                        }, 500);
+                    } catch(e) { window.alert("Erro ao prosseguir: " + e.message); }
+                });
+            };
+
+            // Funções de Consulta de Desligamento
+            window.abrirConsultaDesligamento = () => {
+                document.getElementById('inputBuscaDesligamento').value = '';
+                document.getElementById('resultadoBuscaDesligamento').innerHTML = '<div class="p-4 text-center text-slate-400 text-sm">Digite pelo menos 3 caracteres acima para pesquisar...</div>';
+                document.getElementById('modalConsultaDesligamento').classList.remove('tela-oculta');
+            };
+
+            window.fecharConsultaDesligamento = () => {
+                document.getElementById('modalConsultaDesligamento').classList.add('tela-oculta');
+            };
+
+            // Funções do Modal de Movimentação (Tickets)
             window.openModalMovimentacao = (id) => {
                 const item = globalData.find(i => i.id === id);
-                if(!item) return;
-                
-                document.getElementById('movForm').reset();
+                if (!item) return;
                 document.getElementById('movId').value = item.id;
                 document.getElementById('movNome').value = item.nome || '';
                 
                 if (item.movimentacao) {
-                    document.getElementById('movTipo').value = item.movimentacao.tipo || 'Adesão (Novo Titular)';
+                    document.getElementById('movTipo').value = item.movimentacao.tipo || 'Adesão Saúde/Odonto';
                     document.getElementById('movStatus').value = item.movimentacao.status || 'Pendente';
-                    document.getElementById('movData').value = item.movimentacao.dataSolicitacao || '';
+                    document.getElementById('movData').value = item.movimentacao.dataEnvio || '';
                     document.getElementById('movPrazo').value = item.movimentacao.prazo || '';
                     document.getElementById('movNotas').value = item.movimentacao.notas || '';
                 } else {
+                    document.getElementById('movForm').reset();
+                    document.getElementById('movNome').value = item.nome || '';
                     document.getElementById('movStatus').value = 'Pendente';
                     document.getElementById('movData').value = new Date().toISOString().split('T')[0];
-                    if (item.status === 'inclusao') document.getElementById('movTipo').value = 'Adesão (Novo Titular)';
-                    else if (item.status === 'desligado') document.getElementById('movTipo').value = 'Exclusão de Titular';
                 }
-                
                 document.getElementById('modalMovimentacao').classList.remove('tela-oculta');
             };
 
-            window.fecharModalMovimentacao = () => document.getElementById('modalMovimentacao').classList.add('tela-oculta');
+            window.fecharModalMovimentacao = () => {
+                document.getElementById('modalMovimentacao').classList.add('tela-oculta');
+            };
 
             window.salvarMovimentacao = async () => {
-                const id = document.getElementById('movId').value;
                 const btn = document.getElementById('btnSaveMov');
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> A Guardar...'; 
                 btn.disabled = true;
-                
                 try {
+                    const id = document.getElementById('movId').value;
                     const movData = {
                         tipo: document.getElementById('movTipo').value,
                         status: document.getElementById('movStatus').value,
-                        dataSolicitacao: document.getElementById('movData').value,
+                        dataEnvio: document.getElementById('movData').value,
                         prazo: document.getElementById('movPrazo').value,
                         notas: document.getElementById('movNotas').value
                     };
-                    
                     await updateDoc(doc(db, "gestao_beneficios_saude", id), {
                         movimentacao: movData,
                         updatedAt: new Date().toISOString()
                     });
-                    
-                    fecharModalMovimentacao();
+                    window.fecharModalMovimentacao();
                 } catch(e) {
-                    alert("Erro ao salvar: " + e.message);
+                    alert("Erro ao salvar movimentação: " + e.message);
                 }
-                btn.innerHTML = '<i class="fas fa-save mr-1"></i> Salvar Solicitação';
+                btn.innerHTML = '<i class="fas fa-save mr-1"></i> Salvar Solicitação'; 
+                btn.disabled = false;
+            };
+
+            window.exportarRelatorioMovimentacoes = () => {
+                const filtroMov = document.getElementById('filtroStatusMov') ? document.getElementById('filtroStatusMov').value : 'pendente';
+                const dataFiltrada = globalData.filter(item => {
+                    if (filtroMov === 'pendente') {
+                        if (item.movimentacao && item.movimentacao.status === 'Pendente') return true;
+                        if (!item.movimentacao && (item.status === 'inclusao' || item.status === 'desligado')) return true;
+                        return false;
+                    } else {
+                        return item.movimentacao && (item.movimentacao.status === 'Concluído' || item.movimentacao.status === 'Cancelado');
+                    }
+                });
+                
+                let csvContent = "data:text/csv;charset=utf-8,\uFEFF"; // Formato aceito pelo Excel com acentos (UTF-8 com BOM)
+                csvContent += "Colaborador;Tipo;Status;Data Envio;Prazo;Observações\n";
+                dataFiltrada.forEach(row => {
+                    let tipo = row.movimentacao ? row.movimentacao.tipo : (row.status === 'inclusao' ? 'Inclusão' : 'Exclusão');
+                    let status = row.movimentacao ? row.movimentacao.status : 'Pendente';
+                    let dataEnvio = row.movimentacao ? formatDateBR(row.movimentacao.dataEnvio) : '';
+                    let prazo = row.movimentacao ? formatDateBR(row.movimentacao.prazo) : '';
+                    let notas = row.movimentacao ? (row.movimentacao.notas || '').replace(/;/g, ',').replace(/\n/g, ' ') : '';
+                    csvContent += `${row.nome};${tipo};${status};${dataEnvio};${prazo};${notas}\n`;
+                });
+                
+                const encodedUri = encodeURI(csvContent);
+                const link = document.createElement("a");
+                link.setAttribute("href", encodedUri);
+                link.setAttribute("download", `relatorio_movimentacoes_${filtroMov}.csv`);
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            window.enviarEmailTicket = (id) => {
+                const row = globalData.find(i => i.id === id);
+                if(!row) return;
+
+                let emailDestino = "relacionamento@hphealth.com.br";
+                let planoStr = (row.plano && row.plano !== 'Sem_Plano') ? `Saúde: ${row.plano}` : '';
+                let odontoStr = (row.planoOdonto && row.planoOdonto !== 'Sem_Plano') ? `Odonto: ${row.planoOdonto}` : '';
+                let benefStr = [planoStr, odontoStr].filter(Boolean).join(' | ');
+                
+                let tipoMov = row.movimentacao ? row.movimentacao.tipo : (row.status === 'inclusao' ? 'Inclusão' : 'Exclusão');
+                let notasMov = row.movimentacao ? (row.movimentacao.notas || 'Nenhuma') : 'Nenhuma';
+
+                let emailSubject = encodeURIComponent(`Solicitação de ${tipoMov} - ${row.nome}`);
+                let emailBody = encodeURIComponent(`Olá Equipe HP Health,\n\nSolicitamos a seguinte movimentação de benefícios:\n\nBeneficiário: ${row.nome}\nCPF: ${row.cpf || '-'}\nMatrícula: ${row.matricula || '-'}\nBenefícios Afetados: ${benefStr || 'Nenhum ativo'}\n\nTipo de Solicitação: ${tipoMov}\nObservações / Detalhes: ${notasMov}\n\nFicamos no aguardo da tratativa e do número de protocolo.\n\nAtenciosamente.`);
+                
+                const link = document.createElement("a");
+                link.href = `mailto:${emailDestino}?subject=${emailSubject}&body=${emailBody}`;
+                link.target = "_top";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            window.enviarEmailGeralCorretora = () => {
+                let emailDestino = "relacionamento@hphealth.com.br";
+                let emailSubject = encodeURIComponent("Solicitação de Movimentações (Lote)");
+                
+                const pendentes = globalData.filter(item => {
+                    if (item.movimentacao && item.movimentacao.status === 'Pendente') return true;
+                    if (!item.movimentacao && (item.status === 'inclusao' || item.status === 'desligado')) return true;
+                    return false;
+                });
+
+                let body = "Olá Equipe HP Health,\n\nSolicitamos as seguintes movimentações:\n\n";
+                pendentes.forEach(row => {
+                    let tipo = row.movimentacao ? row.movimentacao.tipo : (row.status === 'inclusao' ? 'Inclusão' : 'Exclusão');
+                    body += `- ${row.nome} (CPF: ${row.cpf || '-'}) | Tipo: ${tipo} | Obs: ${row.movimentacao ? (row.movimentacao.notas || '').replace(/\n/g, ' ') : ''}\n`;
+                });
+                body += "\nFicamos no aguardo da tratativa.\n\nAtenciosamente.";
+                
+                let emailBody = encodeURIComponent(body);
+                
+                const link = document.createElement("a");
+                link.href = `mailto:${emailDestino}?subject=${emailSubject}&body=${emailBody}`;
+                link.target = "_top";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            };
+
+            window.cadastrarFaltantes = async () => {
+                if(!window.faltantesParaCadastro || window.faltantesParaCadastro.length === 0) return;
+                
+                const btn = document.getElementById('btnCadastrarFaltantes');
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> A cadastrar...';
+                btn.disabled = true;
+
+                try {
+                    let cadastrados = 0;
+                    for (let item of window.faltantesParaCadastro) {
+                        await addDoc(colRef, {
+                            nome: item.nome,
+                            cpf: item.cpf,
+                            status: 'ativo',
+                            plano: 'Sem_Plano',
+                            planoOdonto: 'Sem_Plano',
+                            qtdVidas: 1,
+                            valorFatura: 0,
+                            updatedAt: new Date().toISOString()
+                        });
+                        cadastrados++;
+                    }
+                    alert(`${cadastrados} colaboradores cadastrados sem plano com sucesso!`);
+                    window.fecharAuditoria();
+                } catch(e) {
+                    alert("Erro ao cadastrar faltantes: " + e.message);
+                }
+                
                 btn.disabled = false;
             };
 
